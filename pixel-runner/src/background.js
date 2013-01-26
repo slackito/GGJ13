@@ -1,9 +1,7 @@
 var Background = cc.Layer.extend({
     elements : [],
-    spriteList : [ "../res/bg/montanya1.png",
-            "../res/bg/montanya2.png",
-            "../res/bg/montanya3.png"],
-    loadSprite: function (sprite,pos) {
+    nextPosition: 1200,
+    loadSprite: function (sprite) {
         var element = {};
         element.sprite = sprite;
         element.position = 0;
@@ -11,9 +9,8 @@ var Background = cc.Layer.extend({
         if (this.elements.length) {
             var lastElement =  this.elements[this.elements.length - 1];
             var lastPosition = lastElement.position;
-            console.log(lastElement.sprite.getContentSize());
-            var advancePosition = Math.floor(lastElement.sprite.getContentSize().width * (1 - Math.random() * 0.3));
-            element.position = lastPosition + advancePosition+pos;
+            var advancePosition = Math.floor(200 * (1 - Math.random() * 0.3));
+            element.position = lastPosition + advancePosition;
         }
 
         element.sprite.setAnchorPoint(cc.p(0.5, 0.5));
@@ -21,18 +18,30 @@ var Background = cc.Layer.extend({
         this.addChild(element.sprite, Math.random()*10 );        
         
         this.elements.push(element);
-        return this.elements.length-1;
+        this.nextPosition -= 250;
+    },
+    update:function () {
+        while (this.nextPosition > -700) {
+            console.log("MOAR");
+            this.loadSprite(resources.bg.montanya2.sprites[0]);
+            
+            this.gameState.distanceDelta;
+        }
+        
+        this.nextPosition += this.gameState.distanceDelta*70;
+        for (var a = 0 ; a != this.elements.length ; ++a) {
+            var el = this.elements[a];
+            el.position += this.gameState.distanceDelta*70;
+            el.sprite.setPosition(new cc.Point(el.position,250));
+        }
     },
     init:function (state) {
+        this.gameState = state;
         
         //var size = cc.Director.getInstance().getWinSize();
-
-        console.log(resources);
-        this.loadSprite(resources.bg.montanya1.sprites[0],0);
-        this.loadSprite(resources.bg.montanya2.sprites[0],50);
-        this.loadSprite(resources.bg.montanya3.sprites[0],100);
-        this.loadSprite(resources.bg.montanya5.sprites[0],150);
-        
+    
+        this.schedule(this.update);
         return true;
+    
     }
 });
