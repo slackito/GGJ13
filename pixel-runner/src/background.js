@@ -1,38 +1,46 @@
 var Background = cc.Layer.extend({
     elements : [],
-    spriteList : [ "../res/bg/montanya1.png",
-            "../res/bg/montanya2.png",
-            "../res/bg/montanya3.png"],
-    loadSprite: function (sprite,pos) {
+    nextPosition: 1200,
+    loadSprite: function (sprite) {
         var element = {};
-        element.sprite = sprite;
-        element.position = 0;
-        
-        if (this.elements.length) {
-            var lastElement =  this.elements[this.elements.length - 1];
-            var lastPosition = lastElement.position;
-            console.log(lastElement.sprite.getContentSize());
-            var advancePosition = Math.floor(lastElement.sprite.getContentSize().width * (1 - Math.random() * 0.3));
-            element.position = lastPosition + advancePosition+pos;
-        }
+        element.sprite = sprite.create(this.gameState,0.3);
 
+//        var advancePosition = Math.floor(200 * (1 - Math.random() * 0.3));
+        element.position = this.nextPosition;
         element.sprite.setAnchorPoint(cc.p(0.5, 0.5));
-        element.sprite.setPosition(cc.p(element.position, 250));
+        element.sprite.setPosition(cc.p(element.position, 0));
         this.addChild(element.sprite, Math.random()*10 );        
         
         this.elements.push(element);
-        return this.elements.length-1;
+        this.nextPosition -= Math.random()*800;
+    },
+    update:function () {
+        while (this.nextPosition > -700) {
+            console.log("MOAR",this.elements.length);
+            this.loadSprite(resources.bg.montanya2);
+
+        }
+
+
+        while (this.elements.length && this.elements[this.elements.length-1].position > 1200) {
+            this.elements.splice(-1,1);
+        }
+        
+        var increment = this.gameState.distanceDelta*70;
+        this.nextPosition += increment;
+        for (var a = 0 ; a != this.elements.length ; ++a) {
+            var el = this.elements[a];
+            el.position += increment;
+            el.sprite.setPosition(new cc.Point(el.position,250));
+        }
     },
     init:function (state) {
+        this.gameState = state;
         
         //var size = cc.Director.getInstance().getWinSize();
+        this.schedule(this.update);
 
-        console.log(resources);
-        this.loadSprite(resources.bg.montanya1.sprites[0],0);
-        this.loadSprite(resources.bg.montanya2.sprites[0],50);
-        this.loadSprite(resources.bg.montanya3.sprites[0],100);
-        this.loadSprite(resources.bg.montanya5.sprites[0],150);
-        
         return true;
+    
     }
 });

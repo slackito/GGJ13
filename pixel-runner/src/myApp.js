@@ -9,6 +9,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     // global state of the game (used in children)
     _gameState: {
         distance:0,
+        distanceDelta: 0, 
         runVel: 0,
         time: 0,
         jumping: false,
@@ -63,6 +64,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
         var musicTime = cc.AudioEngine.getInstance().getMusicCurrentTime();
         this._hud._musicTime = musicTime;
 
+        this._gameState.distanceDelta = Math.min(20, musicTime - this._gameState.distance);
+        this._gameState.distance = musicTime;
+        
         // check if the user missed a beat
 
 

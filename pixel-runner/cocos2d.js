@@ -16,6 +16,8 @@
             'src/resource.js',
             'src/myApp.js', //add your own files in order here
             'src/runner.js', // rgaitan: runner layer 
+            'src/background.js',
+            'src/animated_layer.js',
             'src/hud.js',
             'src/background.js'
         ]
