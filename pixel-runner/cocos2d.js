@@ -12,6 +12,7 @@
         engineDir:'../cocos2d-engine/',
         //SingleEngineFile:'',
         appFiles:[
+            '../resnames.js',
             'src/resource.js',
             'src/myApp.js', //add your own files in order here
             'src/runner.js', // rgaitan: runner layer 

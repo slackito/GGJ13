@@ -11,6 +11,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         distance:0,
         runVel: 0,
         time: 0,
+        jumping: false,
         beatPos: 0,                // music playing position relative to the current beat, if the user presses a button and beatPos = 0 it means a perfect hit, <0 is early, >0 is late
         lastBeatPos: 0,            // beat position in last frame, to detect when we start a new beat (sign change from positive to negative)
         playbackRate: 1.0,         // music speed multiplier (1.0 == normal speed)
@@ -19,14 +20,12 @@ var SyncRunnerApp = cc.LayerColor.extend(
         okBeatCount: 0             // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
     },
     init:function(){
-        this._super();
-
+        this._super(new cc.Color4B(0,255,255,255));
         // audio init
         cc.AudioEngine.getInstance().init();
         cc.AudioEngine.getInstance().preloadMusic("../music/ggj13-1.ogg");
         cc.AudioEngine.getInstance().playMusic("../music/ggj13-1.ogg", true);
 
-        //this.init(new cc.Color4B(0,0,0,255));
         //var size = cc.Director.getInstance().getWinSize();
         // config 
         this.setTouchEnabled(true);
@@ -98,23 +97,22 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._debug._okBeatCount = this._gameState.okBeatCount;
         this._debug._missedBeatCount = this._gameState.missedBeatCount;
     },
-    onKeyUp:function(e) {
-
+    onKeyUp:function(e){
+        if(e === cc.KEY.up)
+        {
+            this._gameState.jumping = false;
+        }
     },
     onKeyDown:function(e){
-        if(e === cc.KEY.left)
-        {
-            this._gameState.runVel+=1;
-        }
-        else if(e === cc.KEY.right)
-        {
-            this._gameState.runVel-=1; 
-        } 
         if(e === cc.KEY.up)
+        {
+            this._gameState.jumping = true;
+        }
+        if(e === cc.KEY.right)
         {
             this._gameState.playbackRate+=0.1;
         }
-        else if(e === cc.KEY.down)
+        else if(e === cc.KEY.left)
         {
             this._gameState.playbackRate-=0.1; 
         } 
