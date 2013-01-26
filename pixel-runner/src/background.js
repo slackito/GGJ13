@@ -22,9 +22,9 @@ var Background = cc.Layer.extend({
         this.elements.push(element);
         return this.elements.length-1;
     },
-    init:function (state,width,height) {
+    init:function (state) {
         
-        var size = cc.Director.getInstance().getWinSize();
+        //var size = cc.Director.getInstance().getWinSize();
 
         
         for (var i = 0 ; i != this.spriteList.length ; ++i) {

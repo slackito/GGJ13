@@ -13,6 +13,15 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this.setTouchEnabled(true);
         this.setKeyboardEnabled(true);
         this.setPosition(new cc.Point(0,0));
+        
+             var gameState ={ distance : 0
+        };
+        
+        //Background
+        this._background = new Background();
+        this._background.init(gameState);
+        this.addChild(this._background);
+        
         // runner
         this._runner = new RunnerLayer();
         this._runner.init(this._gameState);
