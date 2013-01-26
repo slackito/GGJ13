@@ -1,54 +1,95 @@
-var RunnerSprite = cc.Sprite.extend({
+// Logic for the runner, animations and key/events actions
+var RunnerLayer = cc.Layer.extend({
+    _runnerSprite: null,
+    _runnerSpriteAnimation:null,
+    _runnerSpriteAnimationJump:null,
+    _jumpAction:null,
+    _runAction:null,
+    _runnerSpriteFiles: 
+        ["../res/runner/rastaIdle.png",
+         "../res/runner/rastaRun1.png",
+         "../res/runner/rastaRun2.png",
+         "../res/runner/rastaRun3.png",
+         "../res/runner/rastaJump.png"],
     _gameState: null,
     _currentRotation:0,
     _currentPosition: null,
     _runnerHeight:10,
     _runnerScale:0.3,
-    ctor:function(){
-        this.initWithFile("../res/runner/stop.png");
-        var size = cc.Director.getInstance().getWinSize();
-
-        var runnerSize = this.getContentSize();
-        this.setAnchorPoint(cc.p(0.5, 0.5));
-        this._currentPosition = cc.p(size.width / 2, 
-                                     runnerSize.height*this._runnerScale+this._runnerHeight)
-        this.setPosition(this._currentPosition);
-        this.setScale(-this._runnerScale,this._runnerScale);
-        this.schedule(this.update);
-        
-    },
-    init: function(gameState){
-        this._gameState = gameState;
-    },
+    _resetAnim: true,
     update: function(dt){
         if(this._gameState)
         {
             this._currentPosition.x+=this._gameState.runVel;
             this.setPosition(this._currentPosition);
+            if(this._gameState.jumping)
+            {
+                this.jump();
+                this._resetAnim = true;
+            }
+            else
+            {
+                this.run();
+            }
         }
-    }
-});
-
-
-var RunnerLayer = cc.Layer.extend({
-    isMouseDown:false,
-    runnerSprite:null,
-
+    },
     init:function (gameState) {
         
         //////////////////////////////
         // 1. super init first
         this._super();
+        this._gameState = gameState;
 
-        /////////////////////////////
-        // 2. add a menu item with "X" image, which is clicked to quit the program
-        //    you may modify it.
-        // ask director the window size
-        this.runnerSprite = new RunnerSprite();
-        this.runnerSprite.init(gameState);
-        this.addChild(this.runnerSprite);
+        var size = cc.Director.getInstance().getWinSize();
+        // idle frame sprite with
+        this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[0]);
+        this._runnerSprite.setAnchorPoint(cc.p(0.5,0));
+        this._currentPosition = cc.p(size.width/2.0, 
+                                     this._runnerHeight);
+        this.setPosition(this._currentPosition);
+        //this._runnerSprite.setScale(-this._runnerScale,this._runnerScale);
+        
+        //   
+        //   
+        // Animation using standard Sprite
+        //   
+        this._runnerSpriteAnimation = cc.Animation.create();
+        for (i = 1; i < 3; i++) {
+            this._runnerSpriteAnimation.addSpriteFrameWithFile(
+                this._runnerSpriteFiles[i]);
+        } 
+        this._runnerSpriteAnimation.setDelayPerUnit(0.2);
+        this._runnerSpriteAnimation.setRestoreOriginalFrame(true);
+        
+        // RUN!!!!    
+        this.run();
+   
+        this.schedule(this.update);
+        
 
         return true;
+    },
+    jump: function () {
+        this.removeChild(this._runnerSprite);
+        this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[4]);
+        this._runnerSprite.setAnchorPoint(cc.p(0.5,0));
+        //cc.AnimationManager.getInstance()
+        //this._runnerSprite.runAction(this._jumpAction);
+        this.addChild(this._runnerSprite);
+        
+    },
+    run: function() {
+        this.removeChild(this._runnerSprite);
+        this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[0]);
+        this._runnerSprite.setAnchorPoint(cc.p(0.5,0));
+        if(this._resetAnim)
+        {    
+            this._runAction = cc.RepeatForever.create(
+                cc.Animate.create(this._runnerSpriteAnimation));
+            this._runnerSprite.runAction(this._runAction);
+            this._resetAnim = false;
+        }
+        this.addChild(this._runnerSprite);
     }
 
 });
