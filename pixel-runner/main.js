@@ -37,6 +37,9 @@ var cocos2dApp = cc.Application.extend({
         };
         cc.Loader.getInstance().onload = function () {
             cc.AppController.shareAppController().didFinishLaunchingWithOptions();
+            for(var it = 0; it != g_rescallbacks.length ; ++it) {
+                g_rescallbacks[it]();
+            }
         };
         cc.Loader.getInstance().preload(g_ressources);
     },

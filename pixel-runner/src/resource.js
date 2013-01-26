@@ -9,7 +9,7 @@ function loadSelector(loaders,fallback,array) {
         var starter = array[it].splitted[0];
         var current = starter;
         do {
-            group.push({ splitted:array[it].splitted.slice(1), name:resourcePath+array[it].name });
+            group.push({ splitted:array[it].splitted.slice(1), name:array[it].name });
             ++it;
             if(it >= array.length) break;
             current = array[it].splitted[0];
@@ -31,7 +31,7 @@ resources = {};
 
 
 var g_ressources = [];
-
+var g_rescallbacks = [];
 
 var resourceLoaders = {
     bg : function( arr ) {
@@ -46,7 +46,9 @@ var resourceLoaders = {
                 var sprites = [];
                 for (var it = 0 ; it != arr.length ; ++it) {
                     g_ressources.push({type:"image",src:arr[it].name});
-                    sprites.push(arr[it].name);
+                    
+                    var item = arr[it].name;
+                    g_rescallbacks.push(function(){ sprites.push( cc.Sprite.create(item)); })
                 }
                 return ["sprites",sprites];
             }
@@ -61,7 +63,7 @@ var resourceLoaders = {
 var _res2 = [];
 for (var it =0; it != _res.length; ++it) {
     var splitted = _res[it].replace(/\//g,".").split(".").slice(1);
-    var name = _res[it];
+    var name = resourcePath+_res[it];
     _res2.push({ splitted:splitted, name:name });
 }
 resources = loadSelector(resourceLoaders,function(name,arr){console.error("No loader for "+name);},_res2);
