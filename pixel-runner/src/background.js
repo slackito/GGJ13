@@ -1,8 +1,8 @@
 var Background = cc.Layer.extend({
     elements : [],
-    spriteList : [ "res/bg/montanya1.png",
-            "res/bg/montanya2.png",
-            "res/bg/montanya3.png"],
+    spriteList : [ "../res/bg/montanya1.png",
+            "../res/bg/montanya2.png",
+            "../res/bg/montanya3.png"],
     loadSprite: function (str) {
         var element = {};
         element.sprite = cc.Sprite.create(str);
