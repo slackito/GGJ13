@@ -4,21 +4,23 @@ var SyncRunnerApp = cc.LayerColor.extend(
     // entities of the game (moveables and collisionables)
     _entities: { runner: null }, 
     // global state of the game (used in children)
-    _gameState: { distance:0, runVel: 0 },
+    _gameState: { distance:0, runVel: 0, time: 0 },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
+        // audio init
+        cc.AudioEngine.getInstance().init();
+        cc.AudioEngine.getInstance().preloadMusic("../music/ggj13-1.ogg");
+        cc.AudioEngine.getInstance().playMusic("../music/ggj13-1.ogg");
+
         //var size = cc.Director.getInstance().getWinSize();
         // config 
         this.setTouchEnabled(true);
         this.setKeyboardEnabled(true);
         this.setPosition(new cc.Point(0,0));
         
-             var gameState ={ distance : 0
-        };
-        
         //Background
         this._background = new Background();
-        this._background.init(gameState);
+        this._background.init(this._gameState);
         this.addChild(this._background);
         
         // runner
@@ -35,6 +37,10 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._super();
     },
     update:function(dt){
+        this._gameState.time = dt;
+        
+        // example: dynamically changing music playback rate
+        // cc.AudioEngine.getInstance().setMusicPlaybackRate(1.0 + 0.4*Math.sin(this._gameState.time));
     },
     onKeyUp:function(e){
 
