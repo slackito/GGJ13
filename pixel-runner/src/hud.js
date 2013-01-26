@@ -7,20 +7,44 @@ var HudLayer = cc.Layer.extend({
         // 1. super init first
         this._super();
 
-        this._helloLabel = cc.LabelTTF.create("","Courier new", 24, cc.size(600,50), cc.TEXT_ALIGNMENT_LEFT);
-        this.addChild(this._helloLabel);
-        var s = cc.Director.getInstance().getWinSize();
-        this._helloLabel.setPosition(new cc.Point(300,s.height - 30));
-        this._helloLabel.setColor(new cc.Color3B(0,0,0));
+        // initial values for debug label info
         this._musicTime = 0;
         this._beatPos = 0;
         this._bpm = 0;
         this._musicSync = "";
+        // debug label
+        this._debugLabel = cc.LabelTTF.create("","Courier new", 24, cc.size(600,30), cc.TEXT_ALIGNMENT_LEFT);
+        this.addChild(this._debugLabel);
+        var s = cc.Director.getInstance().getWinSize();
+        this._debugLabel.setPosition(new cc.Point(400,s.height - 30));
+        this._debugLabel.setColor(new cc.Color3B(0,0,0));
 
+        // fullHeart sprite
+        this._emptyHeart = cc.Sprite.create("../res/icons/corazon_vacio.png");
+        this._emptyHeart.setPosition(new cc.Point(30,s.height - 30));
+        this.addChild(this._emptyHeart);
+        this._fullHeart = cc.Sprite.create("../res/icons/corazon_lleno.png");
+        this._fullHeart.setPosition(new cc.Point(30,s.height - 30));
+        this.addChild(this._fullHeart);
         return true;
     },
+    update: function() {
+    },
     draw: function() {
-        this._helloLabel.setString(this._musicSync +"    OK: " + this._okBeatCount + " Missed: " + this._missedBeatCount);
+        this._debugLabel.setString("Score: " + this._score); // + " OK: " + this._okBeatCount + " Missed: " + this._missedBeatCount);
+        var scale = 1.0 - Math.abs(Math.min(1.0, 2*this._beatPos));
+        this._fullHeart.setScale(scale, scale);
+        //if (scale > 0.8) 
+        //    this.addChild(this._fullHeart);
+        //else
+        //    this.removeChild(this._fullHeart);
+        var edge0 = 0.85;
+        var edge1 = 0.95;
+        var t = (scale-edge0)/(edge1-edge0);
+        t = Math.max(0.0, Math.min(1.0, t));
+        var opacity = t*t*(3-2*t);
+        this._fullHeart.setOpacity(255*opacity);
+        this._emptyHeart.setScale(scale, scale);
     }
 
 });

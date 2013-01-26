@@ -9,9 +9,11 @@ var SyncRunnerApp = cc.LayerColor.extend(
     // global state of the game (used in children)
     _gameState: {
         distance:0,
+        distanceDelta: 0, 
         runVel: 0,
         time: 0,
         jumping: false,
+        score: 0, 
         beatPos: 0,                // music playing position relative to the current beat, if the user presses a button and beatPos = 0 it means a perfect hit, <0 is early, >0 is late
         lastBeatPos: 0,            // beat position in last frame, to detect when we start a new beat (sign change from positive to negative)
         playbackRate: 1.0,         // music speed multiplier (1.0 == normal speed)
@@ -62,6 +64,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
         var musicTime = cc.AudioEngine.getInstance().getMusicCurrentTime();
         this._hud._musicTime = musicTime;
 
+        this._gameState.distanceDelta = Math.min(20, musicTime - this._gameState.distance);
+        this._gameState.distance = musicTime;
+        
         // check if the user missed a beat
 
 
@@ -95,7 +100,8 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._hud._beatPos = beatPos;
         this._hud._bpm = this._consts.SONG_BPM;
         this._hud._okBeatCount = this._gameState.okBeatCount;
-        this._hud._missedBeatCount = this._gameState.missedBeatCount;      
+        this._hud._missedBeatCount = this._gameState.missedBeatCount;
+        this._hud._score = this._gameState.score;
     },
     onKeyUp:function(e){
         if(e === cc.KEY.up)
@@ -119,9 +125,11 @@ var SyncRunnerApp = cc.LayerColor.extend(
         else if(e == cc.KEY.space)
         {
             if (!this._gameState.playedCurrentBeat) {
+                var absPos = Math.abs(this._gameState.beatPos);
                 this._gameState.playedCurrentBeat = true;
-                if (Math.abs(this._gameState.beatPos) <= this._consts.BEAT_TOLERANCE) {
+                if (absPos <= this._consts.BEAT_TOLERANCE) {
                     this._gameState.okBeatCount += 1;
+                    this._gameState.score += 1000-200*Math.round(3*absPos/this._consts.BEAT_TOLERANCE);
                 }
                 else {
                     this._gameState.missedBeatCount += 1;
