@@ -53,13 +53,6 @@ var RunnerLayer = cc.Layer.extend({
         //   
         // Animation using standard Sprite
         //   
-        this._runnerSpriteAnimation = cc.Animation.create();
-        for (i = 1; i < 3; i++) {
-            this._runnerSpriteAnimation.addSpriteFrameWithFile(
-                this._runnerSpriteFiles[i]);
-        } 
-        this._runnerSpriteAnimation.setDelayPerUnit(0.2);
-        this._runnerSpriteAnimation.setRestoreOriginalFrame(true);
         
         // RUN!!!!    
         this.run();
@@ -79,17 +72,25 @@ var RunnerLayer = cc.Layer.extend({
         
     },
     run: function() {
-        this.removeChild(this._runnerSprite);
-        this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[0]);
-        this._runnerSprite.setAnchorPoint(cc.p(0.5,0));
         if(this._resetAnim)
         {    
-            this._runAction = cc.RepeatForever.create(
+            this.removeChild(this._runnerSprite);
+            this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[0]);
+            this._runnerSprite.setAnchorPoint(cc.p(0.5,0));
+            this._runnerSpriteAnimation = cc.Animation.create();
+            for (i = 1; i < 3; i++) {
+                this._runnerSpriteAnimation.addSpriteFrameWithFile(
+                    this._runnerSpriteFiles[i]);
+            } 
+            // Todo: use playbackRate...
+            this._runnerSpriteAnimation.setDelayPerUnit(0.13);
+            this._runnerSpriteAnimation.setRestoreOriginalFrame(true);
+            var runAction = cc.RepeatForever.create(
                 cc.Animate.create(this._runnerSpriteAnimation));
-            this._runnerSprite.runAction(this._runAction);
+            this._runnerSprite.runAction(runAction);
+            this.addChild(this._runnerSprite);
             this._resetAnim = false;
         }
-        this.addChild(this._runnerSprite);
     }
 
 });
