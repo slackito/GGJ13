@@ -17,6 +17,8 @@ var RunnerLayer = cc.Layer.extend({
     _runnerHeight:10,
     _runnerScale:0.3,
     _resetAnim: true,
+    _runVel: 1.0,
+    _updateT: 0,
     update: function(dt){
         if(this._gameState)
         {
@@ -30,6 +32,13 @@ var RunnerLayer = cc.Layer.extend({
             else
             {
                 this.run();
+            }
+            if(this._gameState.time - this._updateT > 1.0)
+            {
+                this._updateT = this._gameState.time;
+                this._runVel = 0.1*(1.0/this._gameState.playbackRate);
+                //console.log("dt:"+this._gameState.time+" runVel:" + this._runVel);
+                this._resetAnim = true;
             }
         }
     },
@@ -48,11 +57,6 @@ var RunnerLayer = cc.Layer.extend({
                                      this._runnerHeight);
         this.setPosition(this._currentPosition);
         //this._runnerSprite.setScale(-this._runnerScale,this._runnerScale);
-        
-        //   
-        //   
-        // Animation using standard Sprite
-        //   
         
         // RUN!!!!    
         this.run();
@@ -74,8 +78,8 @@ var RunnerLayer = cc.Layer.extend({
     run: function() {
         if(this._resetAnim)
         {    
-            this.removeChild(this._runnerSprite);
-            this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[0]);
+            this.removeChild(this._runnerSprite,false);
+            this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[1]);
             this._runnerSprite.setAnchorPoint(cc.p(0.5,0));
             this._runnerSpriteAnimation = cc.Animation.create();
             for (i = 1; i < 3; i++) {
@@ -83,8 +87,8 @@ var RunnerLayer = cc.Layer.extend({
                     this._runnerSpriteFiles[i]);
             } 
             // Todo: use playbackRate...
-            this._runnerSpriteAnimation.setDelayPerUnit(0.13);
-            this._runnerSpriteAnimation.setRestoreOriginalFrame(true);
+            this._runnerSpriteAnimation.setDelayPerUnit(this._runVel);
+            this._runnerSpriteAnimation.setRestoreOriginalFrame(false);
             var runAction = cc.RepeatForever.create(
                 cc.Animate.create(this._runnerSpriteAnimation));
             this._runnerSprite.runAction(runAction);
