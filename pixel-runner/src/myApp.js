@@ -6,8 +6,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     // global state of the game (used in children)
     _gameState: { distance:0, runVel: 0 },
     init:function(){
-        this._super();
-        //this.init(new cc.Color4B(0,0,0,255));
+        this._super(new cc.Color4B(0,255,255,255));
         //var size = cc.Director.getInstance().getWinSize();
         // config 
         this.setTouchEnabled(true);
