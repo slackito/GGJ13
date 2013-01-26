@@ -1,4 +1,4 @@
-var DebugLayer = cc.Layer.extend({
+var HudLayer = cc.Layer.extend({
     
 
     init:function (gameState) {
