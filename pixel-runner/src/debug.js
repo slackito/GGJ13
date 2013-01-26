@@ -11,7 +11,7 @@ var DebugLayer = cc.Layer.extend({
         this.addChild(this._helloLabel);
         var s = cc.Director.getInstance().getWinSize();
         this._helloLabel.setPosition(new cc.Point(300,s.height - 30));
-        this._helloLabel.setColor(new cc.Color3B(255,255,255));
+        this._helloLabel.setColor(new cc.Color3B(0,0,0));
         this._musicTime = 0;
         this._beatPos = 0;
         this._bpm = 0;
