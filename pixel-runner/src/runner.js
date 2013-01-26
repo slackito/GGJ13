@@ -23,7 +23,7 @@ var RunnerSprite = cc.Sprite.extend({
     update: function(dt){
         if(this._gameState)
         {
-            this._currentPosition.x+=this._gameState.runVel*dt;
+            this._currentPosition.x+=this._gameState.runVel;
             this.setPosition(this._currentPosition);
         }
     }

@@ -4,7 +4,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     // entities of the game (moveables and collisionables)
     _entities: { runner: null }, 
     // global state of the game (used in children)
-    _gameState: { distance:0, runVel: 0 },
+    _gameState: { distance:0, runVel: 0, time: 0 },
     init:function(){
         this._super();
         //this.init(new cc.Color4B(0,0,0,255));
@@ -36,6 +36,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._super();
     },
     update:function(dt){
+        this._gameState.time = dt;
     },
     onKeyUp:function(e){
 
