@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Audio tests</title>
+    </head>
+    <body>
+        <audio id="blah">
+        <script>
+            window.onload = function(e) {
+                var audio = document.getElementById("blah");
+                audio.src="gangnam.ogg";
+                audio.play()
+                var t = 0.0;
+                function test() {
+                    var rate = 1.0 + 0.5*Math.sin(t);
+                    //console.log("rate =", rate);
+                    audio.playbackRate = rate;
+                    t += 0.1;
+                    setTimeout(test, 100);
+                }
+                setTimeout(test, 100);
+            }
+        </script>
+    </body>
+</html>
