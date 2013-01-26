@@ -4,31 +4,39 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <link href="styles.css" rel="stylesheet" type="text/css" />
-
+<script>
+    function startGame()
+    {
+        var scene = cc.Scene.create();
+        var app = new SyncRunnerApp();
+        scene.addChild(app);
+        cc.Director.getInstance().replaceScene(cc.TransitionFade.create(1.2, scene));
+        app.init();
+        document.getElementById("wrapper").style.visibility = "hidden";
+    }
+</script>
 <title>Sync Runners</title>
 </head>
-
 <body>
+    <div id="wrapper" onClick="startGame()">
+            <div id="logo">
+                    <img src="img/logoSync.png" class="sync">
+                    <img src="img/logoRunners.png" class="runners">
+                    <img src="img/flare.jpg" class="flare">
+            </div>
+            <div id="logoHeart">
+                    <img src="img/pixeltrans.png">
+            </div>
+            <div id="cloud">
+                    <img src="img/nubeUp.png" class="cloudUp">
+                    <img src="img/nubeDown.png" class="cloudDown">
+            </div>
+    </div>
+    <div style="margin-top: 10px; margin-left: auto; margin-right: auto; width: 700px; text-align: center; font-size: 0; border: 2px solid black;">
+        <canvas id="gameCanvas" width="700" height="500">
 
-<!--div id="wrapper">
-	<div id="logo">
-		<img src="img/logoSync.png" class="sync">
-		<img src="img/logoRunners.png" class="runners">
-		<img src="img/flare.jpg" class="flare">
-	</div>
-	<div id="logoHeart">
-		<img src="img/pixeltrans.png">
-	</div>
-	<div id="cloud">
-		<img src="img/nubeUp.png" class="cloudUp">
-		<img src="img/nubeDown.png" class="cloudDown">
-	</div>
-</div-->
-<div style="margin-top: 10px; margin-left: auto; margin-right: auto; width: 800px; text-align: center; font-size: 0; border: 2px solid black;">
-    <canvas id="gameCanvas" width="800" height="500">
-        
-    </canvas>
-</div>
+        </canvas>
+    </div>
 </body>
 </html>
 <script src="cocos2d.js"></script>

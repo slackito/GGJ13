@@ -131,10 +131,29 @@ var SyncRunnerApp = cc.LayerColor.extend(
     }
 });
 
-var MyScene = cc.Scene.extend({
+/*var SyncRunnerScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
         var app = new SyncRunnerApp();
+        this.addChild(app);
+        app.init();
+    }
+});*/
+
+var SyncRunnerStartApp = cc.LayerColor.extend(
+{
+    onEnter:function(){
+        this._super();
+    },
+    init:function(){
+        this._super(new cc.Color4B(0,255,255,255));
+    }
+});
+
+var SyncRunnerStartScene = cc.Scene.extend({
+    onEnter:function () {
+        this._super();
+        var app = new SyncRunnerStartApp();
         this.addChild(app);
         app.init();
     }

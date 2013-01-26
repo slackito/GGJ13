@@ -64,4 +64,4 @@ var cocos2dApp = cc.Application.extend({
         return true;
     }
 });
-var myApp = new cocos2dApp(MyScene);
+var myApp = new cocos2dApp(SyncRunnerStartScene);
