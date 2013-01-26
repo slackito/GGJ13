@@ -4,7 +4,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     // entities of the game (moveables and collisionables)
     _entities: { runner: null }, 
     // global state of the game (used in children)
-    _gameState: { distance:0, runVel: 0, time: 0 },
+    _gameState: { distance:0, runVel: 0, time: 0, jumping: false },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
         // audio init
@@ -43,17 +43,16 @@ var SyncRunnerApp = cc.LayerColor.extend(
         // cc.AudioEngine.getInstance().setMusicPlaybackRate(1.0 + 0.4*Math.sin(this._gameState.time));
     },
     onKeyUp:function(e){
-
+        if(e === cc.KEY.up)
+        {
+            this._gameState.jumping = false;
+        }
     },
     onKeyDown:function(e){
-        if(e === cc.KEY.left)
+        if(e === cc.KEY.up)
         {
-            this._gameState.runVel+=1;
+            this._gameState.jumping = true;
         }
-        else if(e === cc.KEY.right)
-        {
-            this._gameState.runVel-=1; 
-        } 
     }
 });
 
