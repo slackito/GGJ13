@@ -1,5 +1,4 @@
 var resources = [
-"res/.DS_Store",
 "res/bg/acera/1.png",
 "res/bg/edificio1/1.png",
 "res/bg/edificio2/1.png",
