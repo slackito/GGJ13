@@ -4,7 +4,8 @@ var resourcePath = "../"
 // eliminando ese elemento comun a todos. si no hay nada en loaders, se lo pasa a fallback
 function loadSelector(loaders,fallback,array) {
     var ob = {};
-    for (var it = 0 ; it < array.length ; ++it) {
+    var it = 0;
+    while (it < array.length) {
         var group = [];
         var starter = array[it].splitted[0];
         var current = starter;
