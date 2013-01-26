@@ -35,7 +35,7 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
     _supportedFormat:[],
     _soundEnable:false,
     _effectList:{},
-    _muiscList:{},
+    _musicList:{},
     _isMusicPlaying:false,
     _playingMusic:null,
     _effectsVolume:1,
@@ -43,7 +43,8 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
     _capabilities:{
         mp3:false,
         ogg:false,
-        wav:false
+        wav:false,
+        changePlaybackRate: false,
     },
 
     /**
@@ -66,6 +67,8 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
             // enable sound if any of the audio format is supported
             this._soundEnable = this._capabilities.mp3 || this._capabilities.ogg || this._capabilities.wav;
         }
+
+        this._capabilities.changePlaybackRate = au.hasOwnProperty('playbackRate');
     },
 
     /**
@@ -87,7 +90,7 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
         if (this._soundEnable) {
             var extName = this._getExtFromFullPath(path);
             var keyname = this._getPathWithoutExt(path);
-            if (this._checkAudioFormatSupported(extName) && !this._muiscList.hasOwnProperty(keyname)) {
+            if (this._checkAudioFormatSupported(extName) && !this._musicList.hasOwnProperty(keyname)) {
                 var soundCache = new Audio(path);
                 soundCache.preload = 'auto';
 
@@ -110,7 +113,7 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
                 // load it
                 soundCache.load();
 
-                this._muiscList[keyname] = soundCache
+                this._musicList[keyname] = soundCache
             }
         }
         cc.Loader.getInstance().onResLoaded();
@@ -126,13 +129,13 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
      */
     playMusic:function (path, loop) {
         var keyname = this._getPathWithoutExt(path);
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            this._muiscList[this._playingMusic].pause();
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            this._musicList[this._playingMusic].pause();
         }
         this._playingMusic = keyname;
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            this._muiscList[this._playingMusic].loop = loop || false;
-            this._muiscList[this._playingMusic].play();
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            this._musicList[this._playingMusic].loop = loop || false;
+            this._musicList[this._playingMusic].play();
         }
     },
 
@@ -144,11 +147,11 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
      * cc.AudioEngine.getInstance().stopMusic();
      */
     stopMusic:function (releaseData) {
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            this._muiscList[this._playingMusic].pause();
-            this._muiscList[this._playingMusic].currentTime = 0;
-            if (releaseData && this._muiscList.hasOwnProperty(this._playingMusic)) {
-                delete this._muiscList[this._playingMusic];
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            this._musicList[this._playingMusic].pause();
+            this._musicList[this._playingMusic].currentTime = 0;
+            if (releaseData && this._musicList.hasOwnProperty(this._playingMusic)) {
+                delete this._musicList[this._playingMusic];
             }
         }
     },
@@ -160,8 +163,8 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
      * cc.AudioEngine.getInstance().pauseMusic();
      */
     pauseMusic:function () {
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            this._muiscList[this._playingMusic].pause();
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            this._musicList[this._playingMusic].pause();
         }
     },
 
@@ -172,8 +175,8 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
      * cc.AudioEngine.getInstance().resumeMusic();
      */
     resumeMusic:function () {
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            this._muiscList[this._playingMusic].play();
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            this._musicList[this._playingMusic].play();
         }
     },
 
@@ -184,9 +187,23 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
      * cc.AudioEngine.getInstance().rewindMusic();
      */
     rewindMusic:function () {
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            this._muiscList[this._playingMusic].currentTime = 0;
-            this._muiscList[this._playingMusic].play();
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            this._musicList[this._playingMusic].currentTime = 0;
+            this._musicList[this._playingMusic].play();
+        }
+    },
+    /**
+     * Set playback rate of playing music
+     * @param {Number} Playback rate: 1.0 means normal speed, >1 is faster, <1 is slower
+     * @example
+     * //example
+     * cc.AudioEngine.getInstance().setMusicPlaybackRate(1.1) // slightly faster than the original speed
+     */
+    setMusicPlaybackRate:function (playbackRate) {
+        if (this._capabilities.changePlaybackRate) {
+            if (this._musicList.hasOwnProperty(this._playingMusic)) {
+                this._musicList[this._playingMusic].playbackRate = playbackRate;
+            }
         }
     },
     willPlayMusic:function () {
@@ -217,8 +234,8 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
      * var volume = cc.AudioEngine.getInstance().getMusicVolume();
      */
     getMusicVolume:function () {
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            return this._muiscList[this._playingMusic].volume;
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            return this._musicList[this._playingMusic].volume;
         }
         return 0;
     },
@@ -231,8 +248,8 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
      * cc.AudioEngine.getInstance().setMusicVolume(0.5);
      */
     setMusicVolume:function (volume) {
-        if (this._muiscList.hasOwnProperty(this._playingMusic)) {
-            var music = this._muiscList[this._playingMusic];
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            var music = this._musicList[this._playingMusic];
             if (volume > 1) {
                 music.volume = 1;
             }
