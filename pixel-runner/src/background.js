@@ -3,16 +3,17 @@ var Background = cc.Layer.extend({
     spriteList : [ "../res/bg/montanya1.png",
             "../res/bg/montanya2.png",
             "../res/bg/montanya3.png"],
-    loadSprite: function (sprite) {
+    loadSprite: function (sprite,pos) {
         var element = {};
         element.sprite = sprite;
-        sprite.position = 0;
+        element.position = 0;
         
         if (this.elements.length) {
             var lastElement =  this.elements[this.elements.length - 1];
             var lastPosition = lastElement.position;
+            console.log(lastElement.sprite.getContentSize());
             var advancePosition = Math.floor(lastElement.sprite.getContentSize().width * (1 - Math.random() * 0.3));
-            element.position = lastPosition + advancePosition;
+            element.position = lastPosition + advancePosition+pos;
         }
 
         element.sprite.setAnchorPoint(cc.p(0.5, 0.5));
@@ -27,10 +28,10 @@ var Background = cc.Layer.extend({
         //var size = cc.Director.getInstance().getWinSize();
 
         console.log(resources);
-        var montanyas = resources.bg.montanya.sprites;
-        for (var i = 0 ; i != montanyas.length ; ++i) {
-            this.loadSprite(montanyas[i]);
-        }
+        this.loadSprite(resources.bg.montanya1.sprites[0],0);
+        this.loadSprite(resources.bg.montanya2.sprites[0],50);
+        this.loadSprite(resources.bg.montanya3.sprites[0],100);
+        this.loadSprite(resources.bg.montanya5.sprites[0],150);
         
         return true;
     }
