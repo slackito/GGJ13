@@ -5,7 +5,7 @@ var RunnerSprite = cc.Sprite.extend({
     _runnerHeight:10,
     _runnerScale:0.3,
     ctor:function(){
-        this.initWithFile("res/runner/stop.png");
+        this.initWithFile("../res/runner/stop.png");
         var size = cc.Director.getInstance().getWinSize();
 
         var runnerSize = this.getContentSize();
