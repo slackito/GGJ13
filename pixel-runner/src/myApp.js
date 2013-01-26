@@ -7,6 +7,12 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _gameState: { distance:0, runVel: 0, time: 0 },
     init:function(){
         this._super();
+
+        // audio init
+        cc.AudioEngine.getInstance().init();
+        cc.AudioEngine.getInstance().preloadMusic("../music/ggj13-1.ogg");
+        cc.AudioEngine.getInstance().playMusic("../music/ggj13-1.ogg");
+
         //this.init(new cc.Color4B(0,0,0,255));
         //var size = cc.Director.getInstance().getWinSize();
         // config 
@@ -14,12 +20,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this.setKeyboardEnabled(true);
         this.setPosition(new cc.Point(0,0));
         
-             var gameState ={ distance : 0
-        };
-        
         //Background
         this._background = new Background();
-        this._background.init(gameState);
+        this._background.init(this._gameState);
         this.addChild(this._background);
         
         // runner
@@ -37,6 +40,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
     },
     update:function(dt){
         this._gameState.time = dt;
+        
+        // example: dynamically changing music playback rate
+        // cc.AudioEngine.getInstance().setMusicPlaybackRate(1.0 + 0.4*Math.sin(this._gameState.time));
     },
     onKeyUp:function(e){
 
