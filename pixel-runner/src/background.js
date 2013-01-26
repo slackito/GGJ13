@@ -3,10 +3,10 @@ var Background = cc.Layer.extend({
     spriteList : [ "../res/bg/montanya1.png",
             "../res/bg/montanya2.png",
             "../res/bg/montanya3.png"],
-    loadSprite: function (str) {
+    loadSprite: function (sprite) {
         var element = {};
-        element.sprite = cc.Sprite.create(str);
-        element.position = 0;
+        element.sprite = sprite;
+        sprite.position = 0;
         
         if (this.elements.length) {
             var lastElement =  this.elements[this.elements.length - 1];
@@ -26,9 +26,10 @@ var Background = cc.Layer.extend({
         
         //var size = cc.Director.getInstance().getWinSize();
 
-        
-        for (var i = 0 ; i != this.spriteList.length ; ++i) {
-            this.loadSprite(this.spriteList[i]);
+        console.log(resources);
+        var montanyas = resources.bg.montanya.sprites;
+        for (var i = 0 ; i != montanyas.length ; ++i) {
+            this.loadSprite(montanyas[i]);
         }
         
         return true;
