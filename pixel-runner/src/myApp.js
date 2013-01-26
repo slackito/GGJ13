@@ -42,9 +42,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._runner.init(this._gameState);
         this.addChild(this._runner);
         
-        this._debug = new DebugLayer();
-        this._debug.init(this._gameState);
-        this.addChild(this._debug);
+        this._hud = new HudLayer();
+        this._hud.init(this._gameState);
+        this.addChild(this._hud);
 
         // global app update
         this.schedule(this.update);
@@ -60,7 +60,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         // example: dynamically changing music playback rate
         cc.AudioEngine.getInstance().setMusicPlaybackRate(this._gameState.playbackRate);
         var musicTime = cc.AudioEngine.getInstance().getMusicCurrentTime();
-        this._debug._musicTime = musicTime;
+        this._hud._musicTime = musicTime;
 
         // check if the user missed a beat
 
@@ -87,10 +87,10 @@ var SyncRunnerApp = cc.LayerColor.extend(
 
         // debug info
         if (Math.abs(beatPos) < this._consts.BEAT_TOLERANCE) {
-            this._debug._musicSync = "#";
+            this._hud._musicSync = "#";
         }
         else {
-            this._debug._musicSync = " ";
+            this._hud._musicSync = " ";
         }
         this._debug._beatPos = beatPos;
         this._debug._bpm = this._consts.SONG_BPM;
