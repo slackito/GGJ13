@@ -17,7 +17,8 @@
             'src/myApp.js', //add your own files in order here
             'src/runner.js', // rgaitan: runner layer 
             'src/debug.js',
-            'src/background.js'
+            'src/background.js',
+            'src/animated_layer.js'
         ]
     };
     window.addEventListener('DOMContentLoaded', function () {

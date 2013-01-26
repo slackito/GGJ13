@@ -28,10 +28,10 @@ var Background = cc.Layer.extend({
         //var size = cc.Director.getInstance().getWinSize();
 
         console.log(resources);
-        this.loadSprite(resources.bg.montanya1.sprites[0],0);
-        this.loadSprite(resources.bg.montanya2.sprites[0],50);
-        this.loadSprite(resources.bg.montanya3.sprites[0],100);
-        this.loadSprite(resources.bg.montanya5.sprites[0],150);
+        this.loadSprite(resources.bg.montanya1.create(state,0.3),0);
+        this.loadSprite(resources.bg.montanya2.create(state,0.3),50);
+        this.loadSprite(resources.bg.montanya3.create(state,0.3),100);
+        this.loadSprite(resources.bg.montanya5.create(state,0.3),150);
         
         return true;
     }

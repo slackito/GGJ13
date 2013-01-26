@@ -47,11 +47,19 @@ var resourceLoaders = {
                 var sprites = [];
                 for (var it = 0 ; it != arr.length ; ++it) {
                     g_ressources.push({type:"image",src:arr[it].name});
-                    
-                    var item = arr[it].name;
-                    g_rescallbacks.push(function(){ sprites.push( cc.Sprite.create(item)); })
+                    var item = arr[it].name; 
+                    sprites.push(item);
                 }
-                return ["sprites",sprites];
+                //g_rescallbacks.push(function(){
+                    // test resource anim.
+
+                //})
+                var animatedSprite = ["create",function(state,delay) {
+                    var animLayer = new AnimatedLayer();
+                    animLayer.init(sprites,state,delay);
+                    return animLayer;
+                }];
+                return animatedSprite;
             }
             return [name, loadSelector(bgVarsLoader,fallback,arr)];
         };

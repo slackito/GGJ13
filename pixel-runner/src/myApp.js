@@ -95,7 +95,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._debug._beatPos = beatPos;
         this._debug._bpm = this._consts.SONG_BPM;
         this._debug._okBeatCount = this._gameState.okBeatCount;
-        this._debug._missedBeatCount = this._gameState.missedBeatCount;
+        this._debug._missedBeatCount = this._gameState.missedBeatCount;      
     },
     onKeyUp:function(e){
         if(e === cc.KEY.up)
