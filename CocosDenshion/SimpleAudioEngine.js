@@ -227,6 +227,20 @@ cc.AudioEngine = cc.Class.extend(/** @lends cc.AudioEngine# */{
     },
 
     /**
+     * The current time of the music clip, in seconds
+     * @return {Number}
+     * @example
+     * //example
+     * var time = cc.AudioEngine.getInstance().getMusicCurrentTime();
+     */
+    getMusicCurrentTime:function () {
+        if (this._musicList.hasOwnProperty(this._playingMusic)) {
+            return this._musicList[this._playingMusic].currentTime;
+        }
+        return 0;
+    },
+
+    /**
      * The volume of the music max value is 1.0,the min value is 0.0 .
      * @return {Number}
      * @example
