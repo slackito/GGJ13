@@ -27,6 +27,20 @@
 	width: 700px;
 	height: 500px;
 }
+#reload {
+	position: relative;
+	width: 700px;
+	height: 500px;
+	margin: 0px auto;
+	overflow: hidden;
+	top: -1560px;
+        visibility: hidden;
+}
+#reload p {
+    position:relative;
+    tex-align: center;
+    bottom: 80px;
+}
 
 .flare {
 	opacity:0;
