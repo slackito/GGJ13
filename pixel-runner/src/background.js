@@ -47,7 +47,7 @@ var BackgroundLayer = cc.Layer.extend({
         this.name = name;
         
         this.elements = [];
-        this.nextPosition= 800;
+        this.nextPosition= 1200;
         this.depth =function(){ return Math.round(Math.random()+4);};
         this.speed = 70;
 
@@ -63,7 +63,7 @@ var BackgroundLayerObstacle = BackgroundLayer.extend({
     ppb: 90,
     loadSprite: function(type) {
         if(type == "a") this.addSprite("agujero");
-        if(type == "a") this.addSprite("charco");
+        if(type == "b") this.addSprite("charco");
         this.nextPosition -= this.ppb*2;
     },
     update: function(){

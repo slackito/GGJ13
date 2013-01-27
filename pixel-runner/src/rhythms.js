@@ -35,6 +35,9 @@ var rhythms = [
         player: "aba-----"
     },
     {
+        player: "a--b--a-"
+    },
+    {
         player: "a-a-a--b"
     },
     {

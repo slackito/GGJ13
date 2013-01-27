@@ -5,7 +5,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _timeUntilSplash: 1.0,
     _timeUntilCredits: 4.0,
     _splashAdded: false,
-    _fail: -10,
+    _fail: -8,
     _consts: {
         BEAT_TOLERANCE : 0.1,
         HALF_BEAT_TOLERANCE : 0.1,
@@ -18,6 +18,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 { player:"-b------" },
                 { player:"-----b--" },
                 { player:"-b---b--" },
+                { player:"a-a--b--" },
+                { player:"-b-b--a-" },
+                { player:"-b--a-a-" },
+                { player:"-b-b--a-" },
+                { player:"a--b--a-" },
+                { player:"-b-b-b--" },
+                { player:"a--b--a-" },
         ]
     },
     // global state of the game (used in children)
@@ -93,7 +100,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
             // generate pattern queue
             while (this._gameState.patternQueue.length < 30) {
                 var patternArray = this._consts.PATTERNS;
-                var pattern = patternArray[Math.floor(Math.random() * patternArray.length)];
+                var selection = 1 - Math.pow(Math.random(),this._gameState.time*0.01);
+                
+                selection = Math.max(0,Math.min(1,selection));
+                var selection2 = Math.round( selection * (patternArray.length-1));
+                var pattern = patternArray[selection2];
+                console.log(selection,selection2);
+                console.log("");
                 this._gameState.patternQueue += pattern.player;
                 this._gameState.patternQueue2 += pattern.player;
             }
@@ -138,6 +151,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
             if (this._gameState.lastBeatPos > 0 && this._gameState.beatPos < 0) {
                 this._gameState.playedCurrentBeat = false;
                 this._gameState.triggeredCurrentHeartEffect = false;
+                if (this._fail === 0) {
+                    this._fail = 1;
+                }
             }
 
             // start new halfbeat?
@@ -193,12 +209,24 @@ var SyncRunnerApp = cc.LayerColor.extend(
             this._hud._patternQueue = this._gameState.patternQueue;
             this._hud._halfBeatPos = this._gameState.halfBeatPos;
         }
+        // countdown
+        if(this._fail > -4) {
+            if(this._fail < 0) {
+                this._hud._countdownString = ""+(-this._fail);
+            }
+            else if (this._fail == 0) {
+                this._hud._countdownString = "GO!";
+            }
+            else {
+                this._hud._countdownString = "";
+            }
+        }
         // game over stuff 
-        if(this._fail>=2 && this._fail<=6)
+        if(this._fail>=3 && this._fail<=7)
         {
             this._deathLayer.setOpacity(this._fail*30);
         }
-        if(this._fail > 3 || this._gameState.gameOver)
+        if(this._fail > 4 || this._gameState.gameOver)
         {
             this._gameState.timeToDeath-=dt;
             if(this._gameState.timeToDeath <= 0)
@@ -232,13 +260,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
         }
     },
     onKeyUp:function(e){
-        if(e === cc.KEY.up)
+        if(e === cc.KEY.j)
         {
             this._gameState.jumping = false;
         }
     },
     onKeyDown:function(e){
-        if(e === cc.KEY.up)
+        if(e === cc.KEY.j)
         {
             this._gameState.jumping = true;
             // check if we have hit current halfbeat
@@ -260,23 +288,25 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 this._gameState.score -= 5000;
             }
         }
-        if(e === cc.KEY.right)
-        {
-            this._gameState.playbackRate+=0.1;
-        }
-        else if(e === cc.KEY.left)
-        {
-            this._gameState.playbackRate-=0.1; 
-        } 
+        //if(e === cc.KEY.right)
+        //{
+        //    this._gameState.playbackRate+=0.1;
+        //}
+        //else if(e === cc.KEY.left)
+        //{
+        //    this._gameState.playbackRate-=0.1; 
+        //} 
         else if(e == cc.KEY.f)
         {
-            if (!this._gameState.playedCurrentBeat) {
+            if (this._fail > 0 && !this._gameState.playedCurrentBeat) {
                 var absPos = Math.abs(this._gameState.beatPos);
                 this._gameState.playedCurrentBeat = true;
                 if (absPos <= this._consts.BEAT_TOLERANCE) {
                     this._gameState.okBeatCount += 1;
                     this._gameState.score += 1000-200*Math.round(3*absPos/this._consts.BEAT_TOLERANCE);
-                    this._fail = 0;
+                    if (this._fail > 1) {
+                        this._fail = 1;
+                    }
                     this._timeToDeath = 3;
                     this._deathLayer.setOpacity(0);
 
