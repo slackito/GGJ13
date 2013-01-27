@@ -1,4 +1,4 @@
-var Background = cc.Layer.extend({
+var BackgroundLayer = cc.Layer.extend({
     elements : [],
     nextPosition: 1200,
     loadSprite: function (sprite) {
@@ -34,8 +34,9 @@ var Background = cc.Layer.extend({
             el.sprite.setPosition(new cc.Point(el.position,250));
         }
     },
-    init:function (state) {
+    init:function (state,config) {
         this.gameState = state;
+        this.config = config;
         
         //var size = cc.Director.getInstance().getWinSize();
         this.schedule(this.update);

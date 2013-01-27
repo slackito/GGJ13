@@ -71,13 +71,12 @@ console.log("Resources:",resources);
 var s_RunnerStop = "../res/runner/stop.png";
 var s_RunnerRunLeft = "../res/runner/runleft.png";
 
-var g_ressources = [
     //image
-    {type:"image", src:"../res/runner/rastaIdle.png"},
-    {type:"image", src:"../res/runner/rastaRun1.png"},
-    {type:"image", src:"../res/runner/rastaRun2.png"},
-    {type:"image", src:"../res/runner/rastaRun3.png"},
-    {type:"image", src:"../res/runner/rastaJump.png"},
+g_ressources.push({type:"image", src:"../res/runner/rastaIdle.png"}),
+g_ressources.push({type:"image", src:"../res/runner/rastaRun1.png"}),
+g_ressources.push({type:"image", src:"../res/runner/rastaRun2.png"}),
+g_ressources.push({type:"image", src:"../res/runner/rastaRun3.png"}),
+g_ressources.push({type:"image", src:"../res/runner/rastaJump.png"})
 
     //plist
 
@@ -88,4 +87,3 @@ var g_ressources = [
     //bgm
 
     //effect
-];
