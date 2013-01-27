@@ -32,7 +32,8 @@ var SyncRunnerApp = cc.LayerColor.extend(
         okBeatCount: 0,            // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
         gameOver: false,           // flag for gameOver, turns true in update method
         timeToDeath: 3,             // time in secs unti the death!!!!         
-        patternQueue: "-----------------"           // first character = action to do on next half-beat
+        patternQueue: "-----------------"   ,        // first character = action to do on next half-beat
+        patternQueue2: "-----------------"           // first character = action to do on next half-beat
     },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
@@ -80,6 +81,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 var patternArray = this._consts.PATTERNS;
                 var pattern = patternArray[Math.floor(Math.random() * patternArray.length)];
                 this._gameState.patternQueue += pattern.player;
+                this._gameState.patternQueue2 += pattern.player;
             }
 
             // example: dynamically changing music playback rate

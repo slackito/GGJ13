@@ -61,13 +61,17 @@ var BackgroundLayer = cc.Layer.extend({
 
 var BackgroundLayerObstacle = BackgroundLayer.extend({
     ppb: 90,
-    loadSprite: function() {
-        this.addSprite("agujero");
+    loadSprite: function(type) {
+        if(type == "a") this.addSprite("agujero");
         this.nextPosition -= this.ppb*2;
     },
     update: function(){
-        while (this.nextPosition > -200) this.loadSprite();
-
+        while (this.gameState.patternQueue2.length) {
+            var letter = this.gameState.patternQueue2[0];
+            this.gameState.patternQueue2 = this.gameState.patternQueue2.substr(1);
+            this.loadSprite(letter);
+        }
+        
         while (this.elements.length != 0 && this.elements[0].position > 800) {
             this.removeChild(this.elements[0].sprite,true);
             this.elements.splice(0,1);
@@ -80,7 +84,7 @@ var BackgroundLayerObstacle = BackgroundLayer.extend({
         this.elements = [];
         this.nextPosition= this.ppb/2;
         this.depth =function(){ return 3;};
-        this.speed = 750;
+        this.speed = 800;
 
         this.schedule(this.update);
 
