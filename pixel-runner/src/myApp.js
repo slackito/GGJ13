@@ -5,7 +5,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _timeUntilSplash: 1.0,
     _timeUntilCredits: 4.0,
     _splashAdded: false,
-    _fail: -10,
+    _fail: -8,
     _consts: {
         BEAT_TOLERANCE : 0.1,
         HALF_BEAT_TOLERANCE : 0.1,
@@ -206,12 +206,24 @@ var SyncRunnerApp = cc.LayerColor.extend(
             this._hud._patternQueue = this._gameState.patternQueue;
             this._hud._halfBeatPos = this._gameState.halfBeatPos;
         }
+        // countdown
+        if(this._fail > -4) {
+            if(this._fail < 0) {
+                this._hud._countdownString = ""+(-this._fail);
+            }
+            else if (this._fail == 0) {
+                this._hud._countdownString = "GO!";
+            }
+            else {
+                this._hud._countdownString = "";
+            }
+        }
         // game over stuff 
-        if(this._fail>=2 && this._fail<=6)
+        if(this._fail>=3 && this._fail<=7)
         {
             this._deathLayer.setOpacity(this._fail*30);
         }
-        if(this._fail > 3 || this._gameState.gameOver)
+        if(this._fail > 4 || this._gameState.gameOver)
         {
             this._gameState.timeToDeath-=dt;
             if(this._gameState.timeToDeath <= 0)
@@ -289,7 +301,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 if (absPos <= this._consts.BEAT_TOLERANCE) {
                     this._gameState.okBeatCount += 1;
                     this._gameState.score += 1000-200*Math.round(3*absPos/this._consts.BEAT_TOLERANCE);
-                    this._fail = 0;
+                    if (this._fail > 1) {
+                        this._fail = 1;
+                    }
                     this._timeToDeath = 3;
                     this._deathLayer.setOpacity(0);
 

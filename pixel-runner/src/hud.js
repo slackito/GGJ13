@@ -15,6 +15,14 @@ var HudLayer = cc.Layer.extend({
         this._patternQueue = "";
         this._patternQueue2 = "";
         // debug label
+        this._countdownString = "FOLLOW THE BEAT!";
+        this._countdownLabel = cc.LabelTTF.create("","Impact", 36, cc.size(600,30), cc.TEXT_ALIGNMENT_CENTER);
+        this.addChild(this._countdownLabel);
+        var s = cc.Director.getInstance().getWinSize();
+        this._countdownLabel.setPosition(new cc.Point(s.width/2,s.height/2));
+        this._countdownLabel.setColor(new cc.Color3B(255,0,0));
+
+        // debug label
         this._debugLabel = cc.LabelTTF.create("","Courier new", 24, cc.size(600,30), cc.TEXT_ALIGNMENT_LEFT);
         this.addChild(this._debugLabel);
         var s = cc.Director.getInstance().getWinSize();
@@ -36,6 +44,8 @@ var HudLayer = cc.Layer.extend({
         this._debugLabel.setString("Score: " + this._score + " queue: "+ this._patternQueue); // + " OK: " + this._okBeatCount + " Missed: " + this._missedBeatCount + " beatPos:" + this._beatPos.toFixed(2));
         //this._debugLabel.setString("halfBeatPos" + this._halfBeatPos.toFixed(2));
 
+        this._countdownLabel.setString(this._countdownString);
+        
         // beating heart
         var scale = 1.0 - Math.abs(Math.min(1.0, 2*this._beatPos));
         this._fullHeart.setScale(scale, scale);
