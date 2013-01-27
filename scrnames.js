@@ -3,13 +3,19 @@ var scriptsnames = {
 // layer(from res/layer/),minDepth,maxDepth,speed)
 [
     ["cielo",10,10,60],
+    ["deathStar",9.5,9.5,10],
     ["nubes",9,9,90],
     ["montanyas",7,8,300],
     ["edificios",5,6,650],
     ["acera",6,6,750],
+//  ["enemies",6,6,70],
     ["farolalejos",5,5,750],
-    ["farolacerca",1,1,2000],
+    ["farolacerca",1,1,2000], 
 ]
+
+
+
+
 ,
 "res/layer/acera.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
@@ -22,6 +28,11 @@ var scriptsnames = {
     ["sky",100,100],
 ]
 ,
+"res/layer/deathStar.js" :
+// sprite(from res/enemies/),minSpacing,maxSpacing)
+[
+    ["deathStar",1500,1500],
+],
 "res/layer/edificios.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
@@ -29,6 +40,12 @@ var scriptsnames = {
     ["edificio2",260,400],
     ["edificio3",260,400],
     ["edificio4",260,400],
+],
+"res/layer/enemies.js" :
+// sprite(from res/bg/),minSpacing,maxSpacing)
+[
+	["mujer_tetas",1000,4000],
+
 ],
 "res/layer/farolacerca.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
