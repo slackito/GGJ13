@@ -33,6 +33,9 @@ var HudLayer = cc.Layer.extend({
     },
     draw: function() {
         this._debugLabel.setString("Score: " + this._score + " queue: "+ this._patternQueue); // + " OK: " + this._okBeatCount + " Missed: " + this._missedBeatCount + " beatPos:" + this._beatPos.toFixed(2));
+        //this._debugLabel.setString("halfBeatPos" + this._halfBeatPos.toFixed(2));
+
+        // beating heart
         var scale = 1.0 - Math.abs(Math.min(1.0, 2*this._beatPos));
         this._fullHeart.setScale(scale, scale);
         //if (scale > 0.8) 
