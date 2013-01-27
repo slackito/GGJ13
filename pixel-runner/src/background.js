@@ -63,6 +63,7 @@ var BackgroundLayerObstacle = BackgroundLayer.extend({
     ppb: 90,
     loadSprite: function(type) {
         if(type == "a") this.addSprite("agujero");
+        if(type == "a") this.addSprite("charco");
         this.nextPosition -= this.ppb*2;
     },
     update: function(){
