@@ -12,6 +12,7 @@ var HudLayer = cc.Layer.extend({
         this._beatPos = 0;
         this._bpm = 0;
         this._musicSync = "";
+        this._patternQueue = "";
         // debug label
         this._debugLabel = cc.LabelTTF.create("","Courier new", 24, cc.size(600,30), cc.TEXT_ALIGNMENT_LEFT);
         this.addChild(this._debugLabel);
@@ -31,7 +32,7 @@ var HudLayer = cc.Layer.extend({
     update: function() {
     },
     draw: function() {
-        this._debugLabel.setString("Score: " + this._score); // + " OK: " + this._okBeatCount + " Missed: " + this._missedBeatCount + " beatPos:" + this._beatPos.toFixed(2));
+        this._debugLabel.setString("Score: " + this._score + " queue: "+ this._patternQueue); // + " OK: " + this._okBeatCount + " Missed: " + this._missedBeatCount + " beatPos:" + this._beatPos.toFixed(2));
         var scale = 1.0 - Math.abs(Math.min(1.0, 2*this._beatPos));
         this._fullHeart.setScale(scale, scale);
         //if (scale > 0.8) 

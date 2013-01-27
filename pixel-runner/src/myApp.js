@@ -6,7 +6,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _splashAdded: false,
     _consts: {
         BEAT_TOLERANCE : 0.1,
-        SONG_BPM : 125 //TODO: change if we put songs with different BPM
+        HALF_BEAT_TOLERANCE : 0.1,
+        SONG_BPM : 125, //TODO: change if we put songs with different BPM
+        PATTERNS : [
+                { player:"--------" },
+                { player:"a-------" },
+                { player:"a---a---" },
+        ]
     },
     // global state of the game (used in children)
     _gameState: {
@@ -21,10 +27,12 @@ var SyncRunnerApp = cc.LayerColor.extend(
         playbackRate: 1.0,         // music speed multiplier (1.0 == normal speed)
         triggeredCurrentHeartEffect: false,
         playedCurrentBeat: false,  // flag that indicates if the user has pushed the button (on time or not) for the current beat
+        playedCurrentHalfBeat: false,
         missedBeatCount: 0,        // number of beats that have passed without the user pushing the button
         okBeatCount: 0,            // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
         gameOver: false,           // flag for gameOver, turns true in update method
-        timeToDeath: 3             // time in secs unti the death!!!!         
+        timeToDeath: 3,             // time in secs unti the death!!!!         
+        patternQueue: "-------------------"           // first character = action to do on next half-beat
     },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
@@ -67,6 +75,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._gameState.time += dt;
         var musicVolume = 1.0;
         if(!this._gameState.gameOver) { 
+            // generate pattern queue
+            while (this._gameState.patternQueue.length < 30) {
+                var patternArray = this._consts.PATTERNS;
+                var pattern = patternArray[Math.floor(Math.random() * patternArray.length)];
+                this._gameState.patternQueue += pattern.player;
+            }
+
             // example: dynamically changing music playback rate
             cc.AudioEngine.getInstance().setMusicPlaybackRate(this._gameState.playbackRate);
             musicVolume = Math.min(1.0, 1.0 - 3*(this._gameState.playbackRate-1.0));
@@ -76,22 +91,44 @@ var SyncRunnerApp = cc.LayerColor.extend(
 
             this._gameState.distanceDelta = Math.min(20, musicTime - this._gameState.distance);
             this._gameState.distance = musicTime;
+            
 
 
             var seconds_per_beat = 60/this._consts.SONG_BPM;
-            var half_beat = seconds_per_beat / 2
+            var half_beat = seconds_per_beat / 2;
+            var quarter_beat = seconds_per_beat / 4;
+
             var beatPos = musicTime % seconds_per_beat;
             if (beatPos > half_beat) {
                 beatPos = beatPos - seconds_per_beat;
             }
+
+            var halfBeatPos = musicTime % half_beat;
+            if (halfBeatPos > quarter_beat) {
+                halfBeatPos = halfBeatPos - half_beat;
+            }
+
+
             var absPos = Math.abs(beatPos);
             this._gameState.lastBeatPos = this._gameState.beatPos;
             this._gameState.beatPos = beatPos;
+
+            var absHalfPos = Math.abs(halfBeatPos);
+            this._gameState.lastHalfBeatPos = this._gameState.halfBeatPos;
+            this._gameState.halfBeatPos = halfBeatPos;
+            
 
             // start new beat?
             if (this._gameState.lastBeatPos > 0 && this._gameState.beatPos < 0) {
                 this._gameState.playedCurrentBeat = false;
                 this._gameState.triggeredCurrentHeartEffect = false;
+            }
+
+            // start new halfbeat?
+            if (this._gameState.lastHalfBeatPos > 0 && this._gameState.halfBeatPos < 0) {
+                this._gameState.playedCurrentHalfBeat = false;
+                this._gameState.currentHalfBeat = this._gameState.patternQueue.charAt(0);
+                this._gameState.patternQueue = this._gameState.patternQueue.substr(1);
             }
 
             // play heart sound effect?
@@ -101,14 +138,21 @@ var SyncRunnerApp = cc.LayerColor.extend(
             //     var effect = cc.AudioEngine.getInstance()._effectList[effectID];
             //     effect.volume = 0.1 + 3*(this._gameState.playbackRate-1.0);
             // }
-
+            
             var beatThreshold = this._consts.BEAT_TOLERANCE * this._gameState.playbackRate;
+            var halfBeatThreshold = this._consts.HALF_BEAT_TOLERANCE * this._gameState.playbackRate;
 
             if (absPos > beatThreshold && beatPos > 0 && !this._gameState.playedCurrentBeat) {
                 // put here everything we need to do when the user misses a beat
                 this._gameState.missedBeatCount += 1;
                 this._gameState.playedCurrentBeat = true;
                 cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
+            }
+
+            // check if we missed halfbeat
+            if (absHalfPos > halfBeatThreshold && halfBeatPos > 0 && !this._gameState.playedCurrentHalfBeat) {
+                // put here everything we need to do when the user misses a halfbeat
+                this._gameState.playedCurrentHalfBeat = true;
             }
 
             // hud data
@@ -125,6 +169,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
             //this._hud._bpm = this._consts.SONG_BPM;
             this._hud._okBeatCount = this._gameState.okBeatCount;
             this._hud._missedBeatCount = this._gameState.missedBeatCount;
+            this._hud._patternQueue = this._gameState.patternQueue;
         }
         // game over stuff
         if(musicVolume <= 0.0001 || this._gameState.gameOver)
