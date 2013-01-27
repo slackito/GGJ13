@@ -239,6 +239,14 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
             }
         }
+    },
+    onTouchesEnded:function(e)
+    {
+        if(this._gameState.gameOver && this._splashAdded)
+        {
+            cc.AudioEngine.getInstance().pauseMusic();
+            startCredits();
+        }
     }
 });
 

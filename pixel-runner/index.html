@@ -15,6 +15,17 @@
         app.init();
         document.getElementById("wrapper").style.visibility = "hidden";
     }
+    function startCredits()
+    {
+        var scene = cc.Scene.create();
+        var app = new SyncRunnerStartApp();
+        scene.addChild(app);
+        cc.Director.getInstance().replaceScene(cc.TransitionFade.create(1.2, scene));
+        app.init();
+        document.getElementById("wrapper").style.visibility = "hidden";
+        document.getElementById("credits").style.visibility = "visible";
+        document.getElementById("video_credits").play();
+    }
 </script>
 
 <title>Sync Runners</title>
@@ -41,7 +52,10 @@
 		<canvas id="gameCanvas" width="700" height="500">
 		</canvas>
 </div>
-
+<div id="credits">
+    <video id="video_credits" width="700" height="500">
+        <source src="../credits/credits.mp4" type="video/mp4" autoplay="false">
+    </div>
 </body>
 </html>
 
