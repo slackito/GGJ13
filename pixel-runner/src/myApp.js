@@ -188,7 +188,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
             this._hud._halfBeatPos = this._gameState.halfBeatPos;
         }
         // game over stuff        
-        if(this._fail > 10 || this._gameState.gameOver)
+        if(this._fail > 3 || this._gameState.gameOver)
         {
             this._gameState.timeToDeath-=dt;
             if(this._gameState.timeToDeath <= 0)
