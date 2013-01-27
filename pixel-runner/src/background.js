@@ -7,16 +7,17 @@ var BackgroundLayer = cc.Layer.extend({
     loadSprite: function () {
         var element = {};
         var base = this.randomSprite();
-        element.sprite = resources.bg[base[0]].create(this.gameState,0.3);
+        element.sprite = resources.bg[base[0]].create(this.gameState,0.1);
 
-//        var advancePosition = Math.floor(200 * (1 - Math.random() * 0.3));
         element.position = this.nextPosition;
         element.sprite.setAnchorPoint(cc.p(0.5, 0.5));
         element.sprite.setPosition(cc.p(element.position, 0));
         this.addChild(element.sprite, Math.random()*10 );        
         
         this.elements.push(element);
-        this.nextPosition -= base[1] + Math.random()*base[2];
+        var delta = base[1] + Math.random()*(base[2]-base[1]);// + element.sprite.getContentSize().width;
+        console.log("Position:", this.nextPosition,delta,base[1], base[2], element.sprite.getContentSize());
+        this.nextPosition -= delta;
     },
     update:function () {
         while (this.nextPosition > -700) this.loadSprite();
@@ -36,12 +37,27 @@ var BackgroundLayer = cc.Layer.extend({
     init:function (state,config) {
         this.gameState = state;
         this.config = config;
-        console.log(this.config);
         
         //var size = cc.Director.getInstance().getWinSize();
         this.schedule(this.update);
 
         return true;
     
+    }
+});
+
+var Background = cc.Node.extend({
+    init:function (state,config) {
+        this.gameState = state;
+        this.config = config;
+        console.log(config);
+        for (var it = 0 ; it != config.length ; ++it) {
+            var ngb = new BackgroundLayer();
+            
+            ngb.init(state,resources.layer[config[it][0]]);
+            this.addChild(ngb);
+        }
+        
+        return true;
     }
 });

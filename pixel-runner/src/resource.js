@@ -60,6 +60,12 @@ var resourceLoaders = {
             return [name,eval(scriptsnames[arr[0].name.slice(3)])];            
         }
         return ["layer",loadSelector({},scriptLoader,arr)];
+    },
+    background: function(arr) {
+        function scriptLoader(name,arr) {
+            return [name,eval(scriptsnames[arr[0].name.slice(3)])];            
+        }
+        return ["background",loadSelector({},scriptLoader,arr)];
     }
 };
 

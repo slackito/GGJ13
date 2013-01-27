@@ -1,4 +1,5 @@
 var resources = [
+"res/background/base.js",
 "res/bg/acera/1.png",
 "res/bg/edificio1/1.png",
 "res/bg/edificio2/1.png",
@@ -39,6 +40,7 @@ var resources = [
 "res/icons/corazon_vacio.png",
 "res/layer/edificios.js",
 "res/layer/montanyas.js",
+"res/layer/nubes.js",
 "res/runner/rastaIdle.png",
 "res/runner/rastaJump.png",
 "res/runner/rastaRun1.png",
