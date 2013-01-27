@@ -13,6 +13,7 @@ var HudLayer = cc.Layer.extend({
         this._bpm = 0;
         this._musicSync = "";
         this._patternQueue = "";
+        this._patternQueue2 = "";
         // debug label
         this._debugLabel = cc.LabelTTF.create("","Courier new", 24, cc.size(600,30), cc.TEXT_ALIGNMENT_LEFT);
         this.addChild(this._debugLabel);

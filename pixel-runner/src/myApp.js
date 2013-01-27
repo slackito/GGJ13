@@ -32,9 +32,10 @@ var SyncRunnerApp = cc.LayerColor.extend(
         missedBeatCount: 0,        // number of beats that have passed without the user pushing the button
         okBeatCount: 0,            // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
         gameOver: false,           // flag for gameOver, turns true in update method
-        timeToDeath: 3,            // time in secs unti the death!!!!         
-        patternQueue: "-----------------",           // first character = action to do on next half-beat
-        runnerPositionX: 0         // ole
+        timeToDeath: 3,             // time in secs unti the death!!!!         
+        patternQueue: "-----------------"   ,        // first character = action to do on next half-beat
+        patternQueue2: "-----------------"   ,        // first character = action to do on next half-beat
+        runnerPositionX: 600         // ole
     },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
@@ -82,6 +83,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 var patternArray = this._consts.PATTERNS;
                 var pattern = patternArray[Math.floor(Math.random() * patternArray.length)];
                 this._gameState.patternQueue += pattern.player;
+                this._gameState.patternQueue2 += pattern.player;
             }
 
             // example: dynamically changing music playback rate
@@ -148,7 +150,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 // put here everything we need to do when the user misses a beat
                 this._gameState.missedBeatCount += 1;
                 this._gameState.playedCurrentBeat = true;
-                cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
+                //cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
             }
 
             // check if we missed halfbeat
@@ -254,16 +256,16 @@ var SyncRunnerApp = cc.LayerColor.extend(
                     this._gameState.score += 1000-200*Math.round(3*absPos/this._consts.BEAT_TOLERANCE);
 
                     // sfx
-                    cc.AudioEngine.getInstance().playEffect("../music/beep.ogg");
+                    //cc.AudioEngine.getInstance().playEffect("../music/beep.ogg");
                 }
                 else {
                     this._gameState.missedBeatCount += 1;
                     // sfx
-                    cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
+                    //cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
                 }
             }
             else {
-                cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
+               // cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
             }
         }
     },

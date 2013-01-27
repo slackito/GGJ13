@@ -22,7 +22,6 @@ var BackgroundLayer = cc.Layer.extend({
     },
     advanceSprites: function() {
         var increment = this.gameState.distanceDelta*this.speed;
-        //console.log("Increment:", this.name,increment);
         this.nextPosition += increment;
         for (var a = 0 ; a != this.elements.length ; ++a) {
             var el = this.elements[a];
@@ -31,13 +30,18 @@ var BackgroundLayer = cc.Layer.extend({
         }
     },
     update:function () {
-        while (this.nextPosition > -200) this.loadSprite();
-        while (this.elements.length && this.elements[this.elements.length-1].position > 800) {
-            this.elements.splice(-1,1);
+        while (this.nextPosition > -600) this.loadSprite();
+        
+        while (this.elements.length > 0 && this.elements[0].position > 1200) {
+            this.removeChild(this.elements[0].sprite,true);
+            this.elements.splice(0,1);
+
         }
         this.advanceSprites();
     },
     init:function (state,config,name) {
+        this._super();
+
         this.gameState = state;
         this.config = config;
         this.name = name;
@@ -56,27 +60,31 @@ var BackgroundLayer = cc.Layer.extend({
 });
 
 var BackgroundLayerObstacle = BackgroundLayer.extend({
-    ppb: 120,
-    loadSprite: function() {
-        this.addSprite("agujero");
-        this.nextPosition -= this.ppb;
+    ppb: 90,
+    loadSprite: function(type) {
+        if(type == "a") this.addSprite("agujero");
+        this.nextPosition -= this.ppb*2;
     },
     update: function(){
-        while (this.nextPosition > -200) this.loadSprite();
-        while (this.elements.length && this.elements[this.elements.length-1].position > 800) {
-            this.elements.splice(-1,1);
+        while (this.gameState.patternQueue2.length) {
+            var letter = this.gameState.patternQueue2[0];
+            this.gameState.patternQueue2 = this.gameState.patternQueue2.substr(1);
+            this.loadSprite(letter);
+        }
+        
+        while (this.elements.length != 0 && this.elements[0].position > 800) {
+            this.removeChild(this.elements[0].sprite,true);
+            this.elements.splice(0,1);
         }
         this.advanceSprites();
     },
     init:function (state) {
-        this.gameState = state;
-        this.config = null;
-        this.name = "player";
+        this._super(state,null,"player");
         
         this.elements = [];
-        this.nextPosition= 0;
+        this.nextPosition= state.runnerPositionX-this.ppb*3;
         this.depth =function(){ return 3;};
-        this.speed = 400;
+        this.speed = 750;
 
         this.schedule(this.update);
 
@@ -87,6 +95,8 @@ var BackgroundLayerObstacle = BackgroundLayer.extend({
 
 var Background = cc.Node.extend({
     init:function (state,config) {
+        this._super();
+
         this.gameState = state;
         this.config = config;
         for (var it = 0 ; it != config.length ; ++it) {
