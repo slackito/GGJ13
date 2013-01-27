@@ -19,10 +19,16 @@ var RunnerLayer = cc.Layer.extend({
     _resetAnim: true,
     _runVel: 1.0,
     _updateT: 0,
+    _stressX: 50,
     update: function(dt){
         if(this._gameState)
         {
-            this._currentPosition.x+=this._gameState.runVel;
+            var size = cc.Director.getInstance().getWinSize();
+            var maxSizeX = size.width - this._stressX;
+            this._currentPosition.x= maxSizeX - 50.0*this._gameState.playbackRate;
+            if(this._currentPosition.x > maxSizeX)
+                this._currentPosition.x = maxSizeX;
+            
             this.setPosition(this._currentPosition);
             if(this._gameState.jumping)
             {
@@ -39,7 +45,7 @@ var RunnerLayer = cc.Layer.extend({
                 this._runVel = 0.1*(1.0/this._gameState.playbackRate);
                 //console.log("dt:"+this._gameState.time+" runVel:" + this._runVel);
                 this._resetAnim = true;
-            }
+            } 
         }
     },
     init:function (gameState) {
@@ -53,7 +59,7 @@ var RunnerLayer = cc.Layer.extend({
         // idle frame sprite with
         this._runnerSprite = cc.Sprite.create(this._runnerSpriteFiles[0]);
         this._runnerSprite.setAnchorPoint(cc.p(0.5,0));
-        this._currentPosition = cc.p(size.width/2.0, 
+        this._currentPosition = cc.p(size.width - this._stressX, 
                                      this._runnerHeight);
         this.setPosition(this._currentPosition);
         //this._runnerSprite.setScale(-this._runnerScale,this._runnerScale);
