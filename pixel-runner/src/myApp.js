@@ -18,6 +18,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 { player:"-b------" },
                 { player:"-----b--" },
                 { player:"-b---b--" },
+                { player:"a-a--b--" },
+                { player:"-b-b--a-" },
+                { player:"-b--a-a-" },
+                { player:"-b-b--a-" },
+                { player:"a--b--a-" },
+                { player:"-b-b-b--" },
+                { player:"a--b--a-" },
         ]
     },
     // global state of the game (used in children)
@@ -93,7 +100,10 @@ var SyncRunnerApp = cc.LayerColor.extend(
             // generate pattern queue
             while (this._gameState.patternQueue.length < 30) {
                 var patternArray = this._consts.PATTERNS;
-                var pattern = patternArray[Math.floor(Math.random() * patternArray.length)];
+                var selection = Math.random() * 2 - 1;
+                
+                selection = Math.max(1,Math.min(0,selection));
+                var pattern = patternArray[Math.floor( selection * patternArray.length)];
                 this._gameState.patternQueue += pattern.player;
                 this._gameState.patternQueue2 += pattern.player;
             }
