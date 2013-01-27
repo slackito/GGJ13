@@ -1,7 +1,9 @@
 var SyncRunnerApp = cc.LayerColor.extend(
 {
     // entities of the game (moveables and collisionables)
-    _entities: { runner: null }, 
+    _entities: { runner: null },
+    _timeUntilSplash: 1.0,
+    _splashAdded: false,
     _consts: {
         BEAT_TOLERANCE : 0.1,
         SONG_BPM : 125 //TODO: change if we put songs with different BPM
@@ -63,10 +65,11 @@ var SyncRunnerApp = cc.LayerColor.extend(
     },
     update:function(dt){
         this._gameState.time += dt;
+        var musicVolume = 1.0;
         if(!this._gameState.gameOver) { 
             // example: dynamically changing music playback rate
             cc.AudioEngine.getInstance().setMusicPlaybackRate(this._gameState.playbackRate);
-            var musicVolume = Math.min(1.0, 1.0 - 3*(this._gameState.playbackRate-1.0));
+            musicVolume = Math.min(1.0, 1.0 - 3*(this._gameState.playbackRate-1.0));
             cc.AudioEngine.getInstance().setMusicVolume(musicVolume);
             var musicTime = cc.AudioEngine.getInstance().getMusicCurrentTime();
             this._hud._musicTime = musicTime;
@@ -124,7 +127,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
             this._hud._missedBeatCount = this._gameState.missedBeatCount;
         }
         // game over stuff
-        if(musicVolume <= 0.0001)
+        if(musicVolume <= 0.0001 || this._gameState.gameOver)
         {
             this._gameState.timeToDeath-=dt;
             if(this._gameState.timeToDeath <= 0)
@@ -133,6 +136,17 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 cc.AudioEngine.getInstance().setMusicVolume(1.0);
                 cc.AudioEngine.getInstance().setMusicPlaybackRate(1.0);
                 this._gameState.distanceDelta = 0;
+                this._timeUntilSplash -= dt;
+                if(!this._splashAdded && this._timeUntilSplash <= 0 )
+                {
+                    var gameOverSplash = resources.bg.gameoversplash.create(this._gameState,0.13);
+                    var size = cc.Director.getInstance().getWinSize();
+                    gameOverSplash.setPosition(size.width/2.0,size.height/2.0);
+                    gameOverSplash.setRunOnce(true);
+                    this.addChild(gameOverSplash);
+                    this._splashAdded = true;
+                    
+                }
             }
         }
         else

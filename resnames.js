@@ -17,6 +17,8 @@ var resources = [
 "res/bg/gameover/gameover.006.png",
 "res/bg/gameoversplash/gameover.007.png",
 "res/bg/gameoversplash/gameover.008.png",
+"res/bg/gameoversplash/gameover.009.png",
+"res/bg/gameoversplash/gameover.010.png",
 "res/bg/montanya1/001.png",
 "res/bg/montanya2/001.png",
 "res/bg/montanya3/001.png",
