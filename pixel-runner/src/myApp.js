@@ -245,13 +245,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
         }
     },
     onKeyUp:function(e){
-        if(e === cc.KEY.up)
+        if(e === cc.KEY.j)
         {
             this._gameState.jumping = false;
         }
     },
     onKeyDown:function(e){
-        if(e === cc.KEY.up)
+        if(e === cc.KEY.j)
         {
             this._gameState.jumping = true;
             // check if we have hit current halfbeat
@@ -273,14 +273,14 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 this._gameState.score -= 5000;
             }
         }
-        if(e === cc.KEY.right)
-        {
-            this._gameState.playbackRate+=0.1;
-        }
-        else if(e === cc.KEY.left)
-        {
-            this._gameState.playbackRate-=0.1; 
-        } 
+        //if(e === cc.KEY.right)
+        //{
+        //    this._gameState.playbackRate+=0.1;
+        //}
+        //else if(e === cc.KEY.left)
+        //{
+        //    this._gameState.playbackRate-=0.1; 
+        //} 
         else if(e == cc.KEY.f)
         {
             if (!this._gameState.playedCurrentBeat) {
