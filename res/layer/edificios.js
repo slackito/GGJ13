@@ -1,7 +1,7 @@
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
-    ["edificio1",-100,500],
-    ["edificio2",-100,500],
-    ["edificio3",-100,500],
-    ["edificio4",-100,500]
+    ["edificio1",-10,500],
+    ["edificio2",-10,500],
+    ["edificio3",-10,500],
+    ["edificio4",-10,500],
 ]
