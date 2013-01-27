@@ -151,6 +151,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
             if (this._gameState.lastBeatPos > 0 && this._gameState.beatPos < 0) {
                 this._gameState.playedCurrentBeat = false;
                 this._gameState.triggeredCurrentHeartEffect = false;
+                if (this._fail === 0) {
+                    this._fail = 1;
+                }
             }
 
             // start new halfbeat?
@@ -295,7 +298,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         } 
         else if(e == cc.KEY.f)
         {
-            if (!this._gameState.playedCurrentBeat) {
+            if (this._fail > 0 && !this._gameState.playedCurrentBeat) {
                 var absPos = Math.abs(this._gameState.beatPos);
                 this._gameState.playedCurrentBeat = true;
                 if (absPos <= this._consts.BEAT_TOLERANCE) {
