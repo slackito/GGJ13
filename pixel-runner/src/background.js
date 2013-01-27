@@ -82,9 +82,9 @@ var BackgroundLayerObstacle = BackgroundLayer.extend({
         this._super(state,null,"player");
         
         this.elements = [];
-        this.nextPosition= this.ppb/2;
+        this.nextPosition= state.runnerPositionX-this.ppb*3;
         this.depth =function(){ return 3;};
-        this.speed = 800;
+        this.speed = 750;
 
         this.schedule(this.update);
 
