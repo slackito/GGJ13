@@ -41,12 +41,6 @@ var scriptsnames = {
     ["edificio3",260,400],
     ["edificio4",260,400],
 ],
-"res/layer/enemies.js" :
-// sprite(from res/bg/),minSpacing,maxSpacing)
-[
-	["mujer_tetas",1000,4000],
-
-],
 "res/layer/farolacerca.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
