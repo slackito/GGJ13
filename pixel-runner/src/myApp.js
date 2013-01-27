@@ -6,7 +6,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _splashAdded: false,
     _consts: {
         BEAT_TOLERANCE : 0.1,
-        HALF_BEAT_TOLERANCE : 0.1,
+        HALF_BEAT_TOLERANCE : 0.05,
         SONG_BPM : 125, //TODO: change if we put songs with different BPM
         PATTERNS : [
                 { player:"--------" },
@@ -32,7 +32,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         okBeatCount: 0,            // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
         gameOver: false,           // flag for gameOver, turns true in update method
         timeToDeath: 3,             // time in secs unti the death!!!!         
-        patternQueue: "-------------------"           // first character = action to do on next half-beat
+        patternQueue: "-----------------"           // first character = action to do on next half-beat
     },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
@@ -153,6 +153,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
             if (absHalfPos > halfBeatThreshold && halfBeatPos > 0 && !this._gameState.playedCurrentHalfBeat) {
                 // put here everything we need to do when the user misses a halfbeat
                 this._gameState.playedCurrentHalfBeat = true;
+                if (this._gameState.currentHalfBeat !== "-") {
+                    this._gameState.score -= 5000;
+                }
             }
 
             // hud data
@@ -170,6 +173,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
             this._hud._okBeatCount = this._gameState.okBeatCount;
             this._hud._missedBeatCount = this._gameState.missedBeatCount;
             this._hud._patternQueue = this._gameState.patternQueue;
+            this._hud._halfBeatPos = this._gameState.halfBeatPos;
         }
         // game over stuff
         if(musicVolume <= 0.0001 || this._gameState.gameOver)
@@ -208,6 +212,21 @@ var SyncRunnerApp = cc.LayerColor.extend(
         if(e === cc.KEY.up)
         {
             this._gameState.jumping = true;
+            // check if we have hit current halfbeat
+            if (this._gameState.currentHalfBeat !== "-") {
+                if (!this._gameState.playedCurrentHalfBeat) {
+                    var absHalfPos = Math.abs(this._gameState.halfBeatPos);
+                    this._gameState.playedCurrentHalfBeat = true;
+                    if (absHalfPos <= this._consts.HALF_BEAT_TOLERANCE) {
+                        // cool!
+                        this._gameState.score += 10000;
+                    }
+                    else {
+                        // boo!
+                        this._gameState.score -= 5000;
+                    }
+                }
+            }
         }
         if(e === cc.KEY.right)
         {
