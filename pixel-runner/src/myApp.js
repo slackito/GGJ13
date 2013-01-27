@@ -8,7 +8,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _fail: 0,
     _consts: {
         BEAT_TOLERANCE : 0.1,
-        HALF_BEAT_TOLERANCE : 0.05,
+        HALF_BEAT_TOLERANCE : 0.1,
         SONG_BPM : 125, //TODO: change if we put songs with different BPM
         PATTERNS : [
                 { player:"--------" },
@@ -34,9 +34,10 @@ var SyncRunnerApp = cc.LayerColor.extend(
         okBeatCount: 0,            // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
         gameOver: false,           // flag for gameOver, turns true in update method
         timeToDeath: 3,             // time in secs unti the death!!!!         
-        patternQueue: "-----------------"   ,        // first character = action to do on next half-beat
-        patternQueue2: "-----------------"   ,        // first character = action to do on next half-beat
-        runnerPositionX: 600         // ole
+        patternQueue: "---------------"   ,        // first character = action to do on next half-beat
+        patternQueue2: "---------------"   ,        // first character = action to do on next half-beat
+        runnerPositionX: 600,         // ole
+        currentHalfBeat: "-"
     },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
@@ -130,7 +131,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
             }
 
             // start new halfbeat?
-            if (this._gameState.lastHalfBeatPos > 0 && this._gameState.halfBeatPos < 0) {
+            if (musicTime > 0 && this._gameState.lastHalfBeatPos > 0 && this._gameState.halfBeatPos < 0) {
                 this._gameState.playedCurrentHalfBeat = false;
                 this._gameState.currentHalfBeat = this._gameState.patternQueue.charAt(0);
                 this._gameState.patternQueue = this._gameState.patternQueue.substr(1);
