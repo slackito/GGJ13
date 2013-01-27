@@ -29,6 +29,8 @@ var SyncRunnerApp = cc.LayerColor.extend(
     },
     // global state of the game (used in children)
     _gameState: {
+        previousDistance:0,
+        currentDistance:0,
         distance:0,
         distanceDelta: 0, 
         runVel: 0,
@@ -118,8 +120,15 @@ var SyncRunnerApp = cc.LayerColor.extend(
             var musicTime = cc.AudioEngine.getInstance().getMusicCurrentTime();
             this._hud._musicTime = musicTime;
 
-            this._gameState.distanceDelta = Math.min(20, musicTime - this._gameState.distance);
-            this._gameState.distance = musicTime;
+            this._gameState.distanceDelta = Math.min(20, musicTime - this._gameState.currentDistance);
+            if (this._gameState.distanceDelta < 0) {
+                this._gameState.previousDistance = this._gameState.currentDistance;
+                this._gameState.distanceDelta = 0;
+                this._gameState.currentDistance = 0;
+            }
+            this._gameState.currentDistance = musicTime;
+
+            this._gameState.distance = this._gameState.currentDistance + this._gameState.previousDistance;
             
 
 
