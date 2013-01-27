@@ -2,10 +2,10 @@ var scriptsnames = {
 "res/background/base.js" :
 // layer(from res/layer/),minDepth,maxDepth,speed)
 [
-    //["nubes",9,9,2],
-    //["montanyas",7,8,5],
-    //["edificios",5,6,50],
-    //["acera",3,3,400],
+    ["nubes",9,9,30],
+    ["montanyas",7,8,80],
+    ["edificios",5,6,300],
+    ["acera",3,3,400],
     ["farolalejos",2,2,400],
     ["farolacerca",1,1,710],
 ],
@@ -17,20 +17,20 @@ var scriptsnames = {
 "res/layer/edificios.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
-    ["edificio1",-10,500],
-    ["edificio2",-10,500],
-    ["edificio3",-10,500],
-    ["edificio4",-10,500],
+    ["edificio1",260,400],
+    ["edificio2",260,400],
+    ["edificio3",260,400],
+    ["edificio4",260,400],
 ],
 "res/layer/farolacerca.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
-    ["farolacerca",400,400],
+    ["farolacerca",4000,4000],
 ],
 "res/layer/farolalejos.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
-    ["farolalejos",400,400],
+    ["farolalejos",4000,4000],
 ],
 "res/layer/montanyas.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)

@@ -1,4 +1,4 @@
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
-    ["farolacerca",400,400],
+    ["farolacerca",4000,4000],
 ]
