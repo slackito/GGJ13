@@ -3,6 +3,8 @@ var RunnerLayer = cc.Layer.extend({
     _runnerSprite: null,
     _runnerSpriteAnimation:null,
     _runnerSpriteAnimationJump:null,
+    _runnerGameOverSprite:null,
+    _dirtyGameOver: true,
     _jumpAction:null,
     _runAction:null,
     _runnerSpriteFiles: 
@@ -14,7 +16,7 @@ var RunnerLayer = cc.Layer.extend({
     _gameState: null,
     _currentRotation:0,
     _currentPosition: null,
-    _runnerHeight:10,
+    _runnerHeight:0,
     _runnerScale:0.3,
     _resetAnim: true,
     _runVel: 1.0,
@@ -23,29 +25,36 @@ var RunnerLayer = cc.Layer.extend({
     update: function(dt){
         if(this._gameState)
         {
-            var size = cc.Director.getInstance().getWinSize();
-            var maxSizeX = size.width - this._stressX;
-            this._currentPosition.x= maxSizeX - 50.0*this._gameState.playbackRate;
-            if(this._currentPosition.x > maxSizeX)
-                this._currentPosition.x = maxSizeX;
-            
-            this.setPosition(this._currentPosition);
-            if(this._gameState.jumping)
+            if(!this._gameState.gameOver)
             {
-                this.jump();
-                this._resetAnim = true;
+                var size = cc.Director.getInstance().getWinSize();
+                var maxSizeX = size.width - this._stressX;
+                this._currentPosition.x= maxSizeX - 50.0*this._gameState.playbackRate;
+                if(this._currentPosition.x > maxSizeX)
+                    this._currentPosition.x = maxSizeX;
+
+                this.setPosition(this._currentPosition);
+                if(this._gameState.jumping)
+                {
+                    this.jump();
+                    this._resetAnim = true;
+                }
+                else
+                {
+                    this.run();
+                }
+                if(this._gameState.time - this._updateT > 1.0)
+                {
+                    this._updateT = this._gameState.time;
+                    this._runVel = 0.1*(1.0/this._gameState.playbackRate);
+                    //console.log("dt:"+this._gameState.time+" runVel:" + this._runVel);
+                    this._resetAnim = true;
+                }
             }
-            else
+            if(this._gameState.gameOver)
             {
-                this.run();
+                this.gameOver();
             }
-            if(this._gameState.time - this._updateT > 1.0)
-            {
-                this._updateT = this._gameState.time;
-                this._runVel = 0.1*(1.0/this._gameState.playbackRate);
-                //console.log("dt:"+this._gameState.time+" runVel:" + this._runVel);
-                this._resetAnim = true;
-            } 
         }
     },
     init:function (gameState) {
@@ -63,7 +72,7 @@ var RunnerLayer = cc.Layer.extend({
                                      this._runnerHeight);
         this.setPosition(this._currentPosition);
         //this._runnerSprite.setScale(-this._runnerScale,this._runnerScale);
-        
+        //
         // RUN!!!!    
         this.run();
    
@@ -101,8 +110,23 @@ var RunnerLayer = cc.Layer.extend({
             this.addChild(this._runnerSprite);
             this._resetAnim = false;
         }
+    },
+    gameOver: function()
+    {
+        if(this._dirtyGameOver)
+        {
+            this.removeAllChildren(true);
+            this._runnerGameOverSprite = resources.bg.gameover.create(this._gameState,0.2);
+            this._runnerGameOverSprite.setRunOnce(true);
+            //this._runnerGameOverSprite.setAnchorPoint(cc.p(0.5,0));
+            var size = cc.Director.getInstance().getWinSize();
+            this.addChild(this._runnerGameOverSprite);
+            var h = this._runnerGameOverSprite.getContentSize().height;
+            this._currentPosition.y = h/2-60;
+            this.setPosition(this._currentPosition);
+            this._dirtyGameOver = false;
+        }
     }
-
 });
 
 

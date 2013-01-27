@@ -9,7 +9,8 @@ var scriptsnames = {
     ["acera",6,6,400],
     ["farolalejos",5,5,400],
     ["farolacerca",1,1,710],
-],
+]
+,
 "res/layer/acera.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [

@@ -6,14 +6,16 @@ var AnimatedLayer = cc.Layer.extend({
     _gameState: null,
     _resetAnim: true,
     _delayPerUnit: 1.0,
+    _runOnce: false,
     update: function(dt){
         if(this._gameState)
         {
             // just in case 
-            //if(this._gameState.reset)
-            //{
-            //    this._resetAnim = true;
-            //}
+            if(this._resetAnim)
+            {
+                this.anim();
+                this._resetAnim = false;
+            }
         }
     },
     //getContentSize: function() {
@@ -23,6 +25,7 @@ var AnimatedLayer = cc.Layer.extend({
         
         this._super();
         this._spriteFiles = sprites;
+        this._runOnce = false;
         if(this._spriteFiles.length === 0)
         {
             cc.Assert("say what?, array of sprites 0");
@@ -55,12 +58,25 @@ var AnimatedLayer = cc.Layer.extend({
             // Todo: use playbackRate...
             this._spriteAnimation.setDelayPerUnit(this._delayPerUnit);
             this._spriteAnimation.setRestoreOriginalFrame(false);
-            var runAction = cc.RepeatForever.create(
-                cc.Animate.create(this._spriteAnimation));
+            var runAction = null;
+            // I hate myself
+            if(!this._runOnce) 
+            {
+                runAction = cc.RepeatForever.create(
+                    cc.Animate.create(this._spriteAnimation));
+            }
+            else
+            {
+                runAction = cc.Animate.create(this._spriteAnimation);
+            }
             this._sprite.runAction(runAction);
             this.addChild(this._sprite);
             this._resetAnim = false;
         }
+    },
+    setRunOnce: function(runOnce) {
+        this._runOnce = runOnce;
+        this._resetAnim = true;
     }
 
 });
