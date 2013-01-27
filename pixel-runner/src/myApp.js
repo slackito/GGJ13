@@ -57,7 +57,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         // runner
         this._runner = new RunnerLayer();
         this._runner.init(this._gameState);
-        this.addChild(this._runner,3);
+        this.addChild(this._runner);
         
         this._hud = new HudLayer();
         this._hud.init(this._gameState);
@@ -184,13 +184,12 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 this._timeUntilSplash -= dt;
                 if(!this._splashAdded && this._timeUntilSplash <= 0 )
                 {
-                    var gameOverSplash = resources.bg.gameoversplash.create(this._gameState,0.13);
+                    var gameOverSplash = resources.bg.gameoversplash.create(this._gameState,0.11);
                     var size = cc.Director.getInstance().getWinSize();
                     gameOverSplash.setPosition(size.width/2.0,size.height/2.0);
                     gameOverSplash.setRunOnce(true);
                     this.addChild(gameOverSplash);
                     this._splashAdded = true;
-                    
                 }
             }
         }
