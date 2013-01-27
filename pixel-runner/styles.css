@@ -1,15 +1,19 @@
 #wrapper {
 	background-image: url('img/bg.png');
 	background-repeat: no-repeat;
-	width: 700px !important;
-	height: 500px !important;
-	margin-left: 350px;
-	margin-top: 150px;
-	top: 50%;
-	left: 50%;
+	width: 700px;
+	height: 500px;
+	margin: 80px auto;
 	overflow: hidden;
 }
-
+#game {
+	position: relative;
+	width: 700px;
+	height: 500px;
+	margin: 80px auto;
+	overflow: hidden;
+	top: -580px;
+}
 #wrapper div, img, div img {
 	width: 700px;
 	height: 500px;
@@ -17,7 +21,7 @@
 
 .flare {
 	opacity:0;
-	z-index: 3;
+	z-index: 300;
 	position: relative;
 	top: -1000px;
 
@@ -80,13 +84,13 @@
 }
 
 #logo img {
-	z-index: 2;
+	z-index: 200;
 }
 
 .sync {
 	position: relative;
 	left: 0;
-	top: 0;
+	top: -30px;
 	opacity:0;
 
 	animation: sync 2s;
@@ -100,25 +104,25 @@
 }
 @keyframes sync {
 	0% {left:700px;top:-600px;opacity:1;}
-	100% {left:0px;top:0px;opacity:1;}
+	100% {left:0px;top:-30px;opacity:1;}
 }
 @-webkit-keyframes sync {
 	0% {left:700px;top:-600px;opacity:1;}
-	100% {left:0px;top:0px;opacity:1;}
+	100% {left:0px;top:-30px;opacity:1;}
 }
 @-moz-keyframes sync {
 	0% {left:700px;top:-600px;opacity:1;}
-	100% {left:0px;top:0px;opacity:1;}
+	100% {left:0px;top:-30px;opacity:1;}
 }
 @-o-keyframes sync {
 	0% {left:700px;top:-600px;opacity:1;}
-	100% {left:0px;top:0px;opacity:1;}
+	100% {left:0px;top:-30px;opacity:1;}
 }
 
 .runners {
 	position: relative;
 	left: 0;
-	top: -500px;
+	top: -530px;
 	opacity:0;
 
 	animation: runners 2s;
@@ -132,25 +136,25 @@
 }
 @keyframes runners {
 	0% {left:-700px;top:200px;opacity:1;}
-	100% {left:0px;top:-500px;opacity:1;}
+	100% {left:0px;top:-530px;opacity:1;}
 }
 @-webkit-keyframes runners {
 	0% {left:-700px;top:200px;opacity:1;}
-	100% {left:0px;top:-500px;opacity:1;}
+	100% {left:0px;top:-530px;opacity:1;}
 }
 @-moz-keyframes runners {
 	0% {left:-700px;top:200px;opacity:1;}
-	100% {left:0px;top:-500px;opacity:1;}
+	100% {left:0px;top:-530px;opacity:1;}
 }
 @-o-keyframes runners {
 	0% {left:-700px;top:200px;opacity:1;}
-	100% {left:0px;top:-500px;opacity:1;}
+	100% {left:0px;top:-530px;opacity:1;}
 }
 
 #logoHeart {
 	position: relative;
-	top: -500px;
-	z-index: 1;
+	top: -530px;
+	z-index: 100;
 	background-image: url('img/logoCombo.png');
 
 	animation: logoCombo 4s;
@@ -227,7 +231,7 @@
 	top: -1000px;
 }
 #cloud img {
-	z-index: 1;
+	z-index: 100;
 }
 .cloudUp {
 	position: relative;
