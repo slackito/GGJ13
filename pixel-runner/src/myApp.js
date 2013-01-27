@@ -3,6 +3,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     // entities of the game (moveables and collisionables)
     _entities: { runner: null },
     _timeUntilSplash: 1.0,
+    _timeUntilCredits: 4.0,
     _splashAdded: false,
     _consts: {
         BEAT_TOLERANCE : 0.1,
@@ -187,6 +188,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 cc.AudioEngine.getInstance().setMusicPlaybackRate(1.0);
                 this._gameState.distanceDelta = 0;
                 this._timeUntilSplash -= dt;
+                this._timeUntilCredits -= dt;
                 if(!this._splashAdded && this._timeUntilSplash <= 0 )
                 {
                     var gameOverSplash = resources.bg.gameoversplash.create(this._gameState,0.11);
@@ -195,6 +197,11 @@ var SyncRunnerApp = cc.LayerColor.extend(
                     gameOverSplash.setRunOnce(true);
                     this.addChild(gameOverSplash);
                     this._splashAdded = true;
+                }
+                if(this._timeUntilCredits <= 0)
+                {
+                    cc.AudioEngine.getInstance().pauseMusic();
+                    startCredits(); 
                 }
             }
         }
