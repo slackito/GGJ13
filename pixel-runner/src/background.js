@@ -2,10 +2,9 @@ var BackgroundLayer = cc.Layer.extend({
     randomSprite: function () {
         return this.config[Math.floor(Math.random()*this.config.length)];
     },
-    loadSprite: function () {
+    addSprite: function(base) {
         var element = {};
-        var base = this.randomSprite();
-        element.sprite = resources.bg[base[0]].create(this.gameState,0.1);
+        element.sprite = resources.bg[base[0]].create(this.gameState,4);
 
         element.position = this.nextPosition;
         element.sprite.setAnchorPoint(cc.p(0.5, 0.5));
@@ -13,7 +12,12 @@ var BackgroundLayer = cc.Layer.extend({
         this.addChild(element.sprite, this.depth() );        
         
         this.elements.push(element);
-        var delta = base[1] + Math.random()*(base[2]-base[1]);// + element.sprite.getContentSize().width;
+
+    },
+    loadSprite: function () {
+        var base = this.randomSprite();
+        this.addSprite(base);
+        var delta = base[1] + Math.random()*(base[2]-base[1]);
         this.nextPosition -= delta;
     },
     update:function () {
@@ -39,7 +43,7 @@ var BackgroundLayer = cc.Layer.extend({
         this.name = name;
         
         this.elements = [];
-        this.nextPosition= 1200;
+        this.nextPosition= 800;
         this.depth =function(){ return Math.round(Math.random()+4);};
         this.speed = 70;
 
@@ -48,6 +52,12 @@ var BackgroundLayer = cc.Layer.extend({
 
         return true;
     
+    }
+});
+
+var BackgroundLayerObstacle = BackgroundLayer.extend({
+    update: function(){
+        
     }
 });
 
