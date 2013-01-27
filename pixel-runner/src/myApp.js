@@ -100,11 +100,13 @@ var SyncRunnerApp = cc.LayerColor.extend(
             // generate pattern queue
             while (this._gameState.patternQueue.length < 30) {
                 var patternArray = this._consts.PATTERNS;
-                var selection = Math.random() * 2 - 1;
+                var selection = 1 - Math.pow(Math.random(),this._gameState.time*0.01);
                 
-                selection = Math.max(1,Math.min(0,selection));
-                var pattern = patternArray[Math.round( selection * patternArray.length-1)];
-                console.log(selection,patternArray.length);
+                selection = Math.max(0,Math.min(1,selection));
+                var selection2 = Math.round( selection * (patternArray.length-1));
+                var pattern = patternArray[selection2];
+                console.log(selection,selection2);
+                console.log("");
                 this._gameState.patternQueue += pattern.player;
                 this._gameState.patternQueue2 += pattern.player;
             }
