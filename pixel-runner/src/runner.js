@@ -34,6 +34,7 @@ var RunnerLayer = cc.Layer.extend({
                     this._currentPosition.x = maxSizeX;
 
                 this.setPosition(this._currentPosition);
+                this._gameState.runnerPositionX = this._currentPosition.x;
                 if(this._gameState.jumping)
                 {
                     this.jump();

@@ -33,7 +33,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         gameOver: false,           // flag for gameOver, turns true in update method
         timeToDeath: 3,             // time in secs unti the death!!!!         
         patternQueue: "-----------------"   ,        // first character = action to do on next half-beat
-        patternQueue2: "-----------------"           // first character = action to do on next half-beat
+        runnerPositionX: 0         // ole
     },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
@@ -58,7 +58,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         // runner
         this._runner = new RunnerLayer();
         this._runner.init(this._gameState);
-        this.addChild(this._runner,3);
+        this.addChild(this._runner);
         
         this._hud = new HudLayer();
         this._hud.init(this._gameState);
@@ -190,13 +190,12 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 this._timeUntilSplash -= dt;
                 if(!this._splashAdded && this._timeUntilSplash <= 0 )
                 {
-                    var gameOverSplash = resources.bg.gameoversplash.create(this._gameState,0.13);
+                    var gameOverSplash = resources.bg.gameoversplash.create(this._gameState,0.11);
                     var size = cc.Director.getInstance().getWinSize();
                     gameOverSplash.setPosition(size.width/2.0,size.height/2.0);
                     gameOverSplash.setRunOnce(true);
                     this.addChild(gameOverSplash);
                     this._splashAdded = true;
-                    
                 }
             }
         }
@@ -260,6 +259,14 @@ var SyncRunnerApp = cc.LayerColor.extend(
             else {
                 cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
             }
+        }
+    },
+    onTouchesEnded:function(e)
+    {
+        if(this._gameState.gameOver && this._splashAdded)
+        {
+            cc.AudioEngine.getInstance().pauseMusic();
+            startCredits();
         }
     }
 });
