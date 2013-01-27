@@ -45,7 +45,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         // runner
         this._runner = new RunnerLayer();
         this._runner.init(this._gameState);
-        this.addChild(this._runner);
+        this.addChild(this._runner,3);
         
         this._hud = new HudLayer();
         this._hud.init(this._gameState);
