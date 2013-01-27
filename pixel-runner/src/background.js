@@ -60,10 +60,10 @@ var BackgroundLayer = cc.Layer.extend({
 });
 
 var BackgroundLayerObstacle = BackgroundLayer.extend({
-    ppb: 120,
+    ppb: 90,
     loadSprite: function() {
         this.addSprite("agujero");
-        this.nextPosition -= this.ppb;
+        this.nextPosition -= this.ppb*2;
     },
     update: function(){
         while (this.nextPosition > -200) this.loadSprite();
@@ -78,9 +78,9 @@ var BackgroundLayerObstacle = BackgroundLayer.extend({
         this._super(state,null,"player");
         
         this.elements = [];
-        this.nextPosition= 0;
+        this.nextPosition= this.ppb/2;
         this.depth =function(){ return 3;};
-        this.speed = 800;
+        this.speed = 750;
 
         this.schedule(this.update);
 
