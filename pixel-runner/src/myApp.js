@@ -5,7 +5,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _timeUntilSplash: 1.0,
     _timeUntilCredits: 4.0,
     _splashAdded: false,
-    _fail: 0,
+    _fail: -10,
     _consts: {
         BEAT_TOLERANCE : 0.1,
         HALF_BEAT_TOLERANCE : 0.1,
@@ -71,6 +71,12 @@ var SyncRunnerApp = cc.LayerColor.extend(
         this._hud = new HudLayer();
         this._hud.init(this._gameState);
         this.addChild(this._hud);
+        
+        this._deathLayer = new cc.LayerColor();
+        this._deathLayer.init(new cc.Color4B(255,10,10,0),
+                              this.getContentSize().width,
+                              this.getContentSize().height);
+        this.addChild(this._deathLayer);
 
         // global app update
         this.schedule(this.update);
@@ -187,13 +193,18 @@ var SyncRunnerApp = cc.LayerColor.extend(
             this._hud._patternQueue = this._gameState.patternQueue;
             this._hud._halfBeatPos = this._gameState.halfBeatPos;
         }
-        // game over stuff        
-        if(this._fail > 10 || this._gameState.gameOver)
+        // game over stuff 
+        if(this._fail>=2 && this._fail<=6)
+        {
+            this._deathLayer.setOpacity(this._fail*30);
+        }
+        if(this._fail > 3 || this._gameState.gameOver)
         {
             this._gameState.timeToDeath-=dt;
             if(this._gameState.timeToDeath <= 0)
             {
                 this._gameState.gameOver = true;
+                this._deathLayer.setOpacity(0);
                 cc.AudioEngine.getInstance().setMusicVolume(1.0);
                 cc.AudioEngine.getInstance().setMusicPlaybackRate(1.0);
                 this._gameState.distanceDelta = 0;
@@ -267,6 +278,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
                     this._gameState.score += 1000-200*Math.round(3*absPos/this._consts.BEAT_TOLERANCE);
                     this._fail = 0;
                     this._timeToDeath = 3;
+                    this._deathLayer.setOpacity(0);
 
                     // sfx
                     //cc.AudioEngine.getInstance().playEffect("../music/beep.ogg");
