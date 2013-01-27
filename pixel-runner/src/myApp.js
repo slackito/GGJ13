@@ -180,7 +180,7 @@ var SyncRunnerStartApp = cc.LayerColor.extend(
         this._super();
     },
     init:function(){
-        this._super(new cc.Color4B(0,255,255,255));
+        this._super(new cc.Color4B(0,255,255,0));
     }
 });
 
