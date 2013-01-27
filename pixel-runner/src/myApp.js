@@ -27,7 +27,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         // audio init
         cc.AudioEngine.getInstance().init();
         cc.AudioEngine.getInstance().preloadMusic("../music/ggj13-1.ogg");
-        cc.AudioEngine.getInstance().preloadEffect("../music/heart.ogg");
+        //cc.AudioEngine.getInstance().preloadEffect("../music/heart.ogg");
         cc.AudioEngine.getInstance().setMusicVolume(0.8);
         cc.AudioEngine.getInstance().playMusic("../music/ggj13-1.ogg", true);
 
