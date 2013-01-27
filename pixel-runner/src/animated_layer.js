@@ -16,9 +16,9 @@ var AnimatedLayer = cc.Layer.extend({
             //}
         }
     },
-    getContentSize: function() {
-        return this._sprite.getContentSize()
-    },
+    //getContentSize: function() {
+    //    return this._sprite.getContentSize()
+    //},
     init:function (sprites,state,delayPerUnit) {
         
         this._super();

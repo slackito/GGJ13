@@ -37,31 +37,20 @@ var g_rescallbacks = [];
 var resourceLoaders = {
     bg : function( arr ) {
         function bgLoader(name, arr ) {
-            
-            var bgVarsLoader = {
-                vars: function(arr) {
-                    return  ["vars",{}];
-                }
-            };
-            function fallback(name,arr) {
-                var sprites = [];
-                for (var it = 0 ; it != arr.length ; ++it) {
-                    g_ressources.push({type:"image",src:arr[it].name});
-                    var item = arr[it].name; 
-                    sprites.push(item);
-                }
-                //g_rescallbacks.push(function(){
-                    // test resource anim.
 
-                //})
-                var animatedSprite = ["create",function(state,delay) {
-                    var animLayer = new AnimatedLayer();
-                    animLayer.init(sprites,state,delay);
-                    return animLayer;
-                }];
-                return animatedSprite;
+            var sprites = [];
+            for (var it = 0 ; it != arr.length ; ++it) {
+                g_ressources.push({type:"image",src:arr[it].name});
+                var item = arr[it].name; 
+                sprites.push(item);
             }
-            return [name, loadSelector(bgVarsLoader,fallback,arr)];
+            var animatedSprite = {"create":function(state,delay) {
+                var animLayer = new AnimatedLayer();
+                animLayer.init(sprites,state,delay);
+                return animLayer;
+            }};
+
+            return [name,animatedSprite];
         };
         
         return ["bg", loadSelector({},bgLoader,arr)];
@@ -77,6 +66,7 @@ for (var it =0; it != _res.length; ++it) {
 }
 resources = loadSelector(resourceLoaders,function(name,arr){console.error("No loader for "+name);},_res2);
 
+console.log("Resources:",resources);
 
 var s_RunnerStop = "../res/runner/stop.png";
 var s_RunnerRunLeft = "../res/runner/runleft.png";

@@ -17,7 +17,7 @@ var Background = cc.Layer.extend({
     update:function () {
         while (this.nextPosition > -700) {
             console.log("MOAR",this.elements.length);
-            this.loadSprite(resources.bg.montanya2);
+            this.loadSprite(resources.bg.nube2);
 
         }
 
