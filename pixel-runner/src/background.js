@@ -2,9 +2,9 @@ var BackgroundLayer = cc.Layer.extend({
     randomSprite: function () {
         return this.config[Math.floor(Math.random()*this.config.length)];
     },
-    addSprite: function(base) {
+    addSprite: function(name) {
         var element = {};
-        element.sprite = resources.bg[base[0]].create(this.gameState,4);
+        element.sprite = resources.bg[name].create(this.gameState,4);
 
         element.position = this.nextPosition;
         element.sprite.setAnchorPoint(cc.p(0.5, 0.5));
@@ -16,17 +16,11 @@ var BackgroundLayer = cc.Layer.extend({
     },
     loadSprite: function () {
         var base = this.randomSprite();
-        this.addSprite(base);
+        this.addSprite(base[0]);
         var delta = base[1] + Math.random()*(base[2]-base[1]);
         this.nextPosition -= delta;
     },
-    update:function () {
-        while (this.nextPosition > -200) this.loadSprite();
-
-        while (this.elements.length && this.elements[this.elements.length-1].position > 800) {
-            this.elements.splice(-1,1);
-        }
-        
+    advanceSprites: function() {
         var increment = this.gameState.distanceDelta*this.speed;
         //console.log("Increment:", this.name,increment);
         this.nextPosition += increment;
@@ -35,7 +29,13 @@ var BackgroundLayer = cc.Layer.extend({
             el.position += increment;
             el.sprite.setPosition(cc.p(el.position,250));
         }
-
+    },
+    update:function () {
+        while (this.nextPosition > -200) this.loadSprite();
+        while (this.elements.length && this.elements[this.elements.length-1].position > 800) {
+            this.elements.splice(-1,1);
+        }
+        this.advanceSprites();
     },
     init:function (state,config,name) {
         this.gameState = state;
@@ -56,8 +56,32 @@ var BackgroundLayer = cc.Layer.extend({
 });
 
 var BackgroundLayerObstacle = BackgroundLayer.extend({
+    ppb: 120,
+    loadSprite: function() {
+        this.addSprite("agujero");
+        this.nextPosition -= this.ppb;
+    },
     update: function(){
+        while (this.nextPosition > -200) this.loadSprite();
+        while (this.elements.length && this.elements[this.elements.length-1].position > 800) {
+            this.elements.splice(-1,1);
+        }
+        this.advanceSprites();
+    },
+    init:function (state) {
+        this.gameState = state;
+        this.config = null;
+        this.name = "player";
         
+        this.elements = [];
+        this.nextPosition= 0;
+        this.depth =function(){ return 3;};
+        this.speed = 400;
+
+        this.schedule(this.update);
+
+        return true;
+    
     }
 });
 
@@ -75,6 +99,10 @@ var Background = cc.Node.extend({
             ngb.speed = c[3];
             this.addChild(ngb);
         }
+        
+        var lPlayer = new BackgroundLayerObstacle();
+        lPlayer.init(state);
+        this.addChild(lPlayer);
         
         return true;
     }
