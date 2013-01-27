@@ -20,7 +20,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
         triggeredCurrentHeartEffect: false,
         playedCurrentBeat: false,  // flag that indicates if the user has pushed the button (on time or not) for the current beat
         missedBeatCount: 0,        // number of beats that have passed without the user pushing the button
-        okBeatCount: 0             // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
+        okBeatCount: 0,            // number of beats the user hit correctly (TODO: separate perfect/ok/meh states for ok-ish presses, for scoring)
+        gameOver: false,           // flag for gameOver, turns true in update method
+        timeToDeath: 3             // time in secs unti the death!!!!         
     },
     init:function(){
         this._super(new cc.Color4B(0,255,255,255));
@@ -61,65 +63,82 @@ var SyncRunnerApp = cc.LayerColor.extend(
     },
     update:function(dt){
         this._gameState.time += dt;
+        if(!this._gameState.gameOver) { 
+            // example: dynamically changing music playback rate
+            cc.AudioEngine.getInstance().setMusicPlaybackRate(this._gameState.playbackRate);
+            var musicVolume = Math.min(1.0, 1.0 - 3*(this._gameState.playbackRate-1.0));
+            cc.AudioEngine.getInstance().setMusicVolume(musicVolume);
+            var musicTime = cc.AudioEngine.getInstance().getMusicCurrentTime();
+            this._hud._musicTime = musicTime;
 
-        // example: dynamically changing music playback rate
-        cc.AudioEngine.getInstance().setMusicPlaybackRate(this._gameState.playbackRate);
-        var musicVolume = Math.min(1.0, 1.0 - 3*(this._gameState.playbackRate-1.0));
-        cc.AudioEngine.getInstance().setMusicVolume(musicVolume);
-        var musicTime = cc.AudioEngine.getInstance().getMusicCurrentTime();
-        this._hud._musicTime = musicTime;
+            this._gameState.distanceDelta = Math.min(20, musicTime - this._gameState.distance);
+            this._gameState.distance = musicTime;
 
-        this._gameState.distanceDelta = Math.min(20, musicTime - this._gameState.distance);
-        this._gameState.distance = musicTime;
-        
 
-        var seconds_per_beat = 60/this._consts.SONG_BPM;
-        var half_beat = seconds_per_beat / 2
-        var beatPos = musicTime % seconds_per_beat;
-        if (beatPos > half_beat) {
-            beatPos = beatPos - seconds_per_beat;
+            var seconds_per_beat = 60/this._consts.SONG_BPM;
+            var half_beat = seconds_per_beat / 2
+            var beatPos = musicTime % seconds_per_beat;
+            if (beatPos > half_beat) {
+                beatPos = beatPos - seconds_per_beat;
+            }
+            var absPos = Math.abs(beatPos);
+            this._gameState.lastBeatPos = this._gameState.beatPos;
+            this._gameState.beatPos = beatPos;
+
+            // start new beat?
+            if (this._gameState.lastBeatPos > 0 && this._gameState.beatPos < 0) {
+                this._gameState.playedCurrentBeat = false;
+                this._gameState.triggeredCurrentHeartEffect = false;
+            }
+
+            // play heart sound effect?
+            // if (!this._gameState.triggeredCurrentHeartEffect && (absPos < 0.015 || (this._gameState.lastBeatPos < 0 && this._gameState.beatPos >= 0))) {
+            //     this._gameState.triggeredCurrentHeartEffect = true;
+            //     var effectID = cc.AudioEngine.getInstance().playEffect("../music/heart.ogg");
+            //     var effect = cc.AudioEngine.getInstance()._effectList[effectID];
+            //     effect.volume = 0.1 + 3*(this._gameState.playbackRate-1.0);
+            // }
+
+            var beatThreshold = this._consts.BEAT_TOLERANCE * this._gameState.playbackRate;
+
+            if (absPos > beatThreshold && beatPos > 0 && !this._gameState.playedCurrentBeat) {
+                // put here everything we need to do when the user misses a beat
+                this._gameState.missedBeatCount += 1;
+                this._gameState.playedCurrentBeat = true;
+                cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
+            }
+
+            // hud data
+            this._hud._beatPos = beatPos;
+            this._hud._score = this._gameState.score;
+
+            // debug info
+            // if (absPos < beatThreshold) {
+            //     this._hud._musicSync = "#";
+            // }
+            // else {
+            //     this._hud._musicSync = " ";
+            // }
+            //this._hud._bpm = this._consts.SONG_BPM;
+            this._hud._okBeatCount = this._gameState.okBeatCount;
+            this._hud._missedBeatCount = this._gameState.missedBeatCount;
         }
-        var absPos = Math.abs(beatPos);
-        this._gameState.lastBeatPos = this._gameState.beatPos;
-        this._gameState.beatPos = beatPos;
-
-        // start new beat?
-        if (this._gameState.lastBeatPos > 0 && this._gameState.beatPos < 0) {
-            this._gameState.playedCurrentBeat = false;
-            this._gameState.triggeredCurrentHeartEffect = false;
+        // game over stuff
+        if(musicVolume <= 0.0001)
+        {
+            this._gameState.timeToDeath-=dt;
+            if(this._gameState.timeToDeath <= 0)
+            {
+                this._gameState.gameOver = true;
+                cc.AudioEngine.getInstance().setMusicVolume(1.0);
+                cc.AudioEngine.getInstance().setMusicPlaybackRate(1.0);
+                this._gameState.distanceDelta = 0;
+            }
         }
-
-        // play heart sound effect?
-        // if (!this._gameState.triggeredCurrentHeartEffect && (absPos < 0.015 || (this._gameState.lastBeatPos < 0 && this._gameState.beatPos >= 0))) {
-        //     this._gameState.triggeredCurrentHeartEffect = true;
-        //     var effectID = cc.AudioEngine.getInstance().playEffect("../music/heart.ogg");
-        //     var effect = cc.AudioEngine.getInstance()._effectList[effectID];
-        //     effect.volume = 0.1 + 3*(this._gameState.playbackRate-1.0);
-        // }
-        
-        var beatThreshold = this._consts.BEAT_TOLERANCE * this._gameState.playbackRate;
-
-        if (absPos > beatThreshold && beatPos > 0 && !this._gameState.playedCurrentBeat) {
-            // put here everything we need to do when the user misses a beat
-            this._gameState.missedBeatCount += 1;
-            this._gameState.playedCurrentBeat = true;
-            cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
+        else
+        {
+            this._gameState.timeToDeath = 3;
         }
-
-        // hud data
-        this._hud._beatPos = beatPos;
-        this._hud._score = this._gameState.score;
-
-        // debug info
-        // if (absPos < beatThreshold) {
-        //     this._hud._musicSync = "#";
-        // }
-        // else {
-        //     this._hud._musicSync = " ";
-        // }
-        //this._hud._bpm = this._consts.SONG_BPM;
-        this._hud._okBeatCount = this._gameState.okBeatCount;
-        this._hud._missedBeatCount = this._gameState.missedBeatCount;
     },
     onKeyUp:function(e){
         if(e === cc.KEY.up)
