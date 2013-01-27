@@ -5,6 +5,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
     _timeUntilSplash: 1.0,
     _timeUntilCredits: 4.0,
     _splashAdded: false,
+    _fail: 0,
     _consts: {
         BEAT_TOLERANCE : 0.1,
         HALF_BEAT_TOLERANCE : 0.05,
@@ -149,6 +150,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
             if (absPos > beatThreshold && beatPos > 0 && !this._gameState.playedCurrentBeat) {
                 // put here everything we need to do when the user misses a beat
                 this._gameState.missedBeatCount += 1;
+                this._fail += 1;
                 this._gameState.playedCurrentBeat = true;
                 //cc.AudioEngine.getInstance().playEffect("../music/fail.ogg");
             }
@@ -159,6 +161,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 this._gameState.playedCurrentHalfBeat = true;
                 if (this._gameState.currentHalfBeat !== "-") {
                     this._gameState.score -= 5000;
+                    this._fail += 1;
                 }
             }
 
@@ -179,8 +182,8 @@ var SyncRunnerApp = cc.LayerColor.extend(
             this._hud._patternQueue = this._gameState.patternQueue;
             this._hud._halfBeatPos = this._gameState.halfBeatPos;
         }
-        // game over stuff
-        if(musicVolume <= 0.0001 || this._gameState.gameOver)
+        // game over stuff        
+        if(this._fail > 10 || this._gameState.gameOver)
         {
             this._gameState.timeToDeath-=dt;
             if(this._gameState.timeToDeath <= 0)
@@ -254,6 +257,8 @@ var SyncRunnerApp = cc.LayerColor.extend(
                 if (absPos <= this._consts.BEAT_TOLERANCE) {
                     this._gameState.okBeatCount += 1;
                     this._gameState.score += 1000-200*Math.round(3*absPos/this._consts.BEAT_TOLERANCE);
+                    this._fail = 0;
+                    this._timeToDeath = 3;
 
                     // sfx
                     //cc.AudioEngine.getInstance().playEffect("../music/beep.ogg");
