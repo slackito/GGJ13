@@ -1,9 +1,13 @@
 var BackgroundLayer = cc.Layer.extend({
     elements : [],
     nextPosition: 1200,
-    loadSprite: function (sprite) {
+    randomSprite: function () {
+        return this.config[Math.floor(Math.random()*this.config.length)];
+    },
+    loadSprite: function () {
         var element = {};
-        element.sprite = sprite.create(this.gameState,0.3);
+        var base = this.randomSprite();
+        element.sprite = resources.bg[base[0]].create(this.gameState,0.3);
 
 //        var advancePosition = Math.floor(200 * (1 - Math.random() * 0.3));
         element.position = this.nextPosition;
@@ -12,15 +16,10 @@ var BackgroundLayer = cc.Layer.extend({
         this.addChild(element.sprite, Math.random()*10 );        
         
         this.elements.push(element);
-        this.nextPosition -= Math.random()*800;
+        this.nextPosition -= base[1] + Math.random()*base[2];
     },
     update:function () {
-        while (this.nextPosition > -700) {
-            console.log("MOAR",this.elements.length);
-            this.loadSprite(resources.bg.nube2);
-
-        }
-
+        while (this.nextPosition > -700) this.loadSprite();
 
         while (this.elements.length && this.elements[this.elements.length-1].position > 1200) {
             this.elements.splice(-1,1);
@@ -37,6 +36,7 @@ var BackgroundLayer = cc.Layer.extend({
     init:function (state,config) {
         this.gameState = state;
         this.config = config;
+        console.log(this.config);
         
         //var size = cc.Director.getInstance().getWinSize();
         this.schedule(this.update);

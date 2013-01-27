@@ -54,6 +54,12 @@ var resourceLoaders = {
         };
         
         return ["bg", loadSelector({},bgLoader,arr)];
+    },
+    layer: function(arr) {
+        function scriptLoader(name,arr) {
+            return [name,eval(scriptsnames[arr[0].name.slice(3)])];            
+        }
+        return ["layer",loadSelector({},scriptLoader,arr)];
     }
 };
 

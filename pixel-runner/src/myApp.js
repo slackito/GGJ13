@@ -39,7 +39,7 @@ var SyncRunnerApp = cc.LayerColor.extend(
         
         //Background
         this._background = new BackgroundLayer();
-        this._background.init(this._gameState);
+        this._background.init(this._gameState,resources.layer.edificios);
         this.addChild(this._background);
         
         // runner

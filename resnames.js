@@ -37,6 +37,8 @@ var resources = [
 "res/icons/corazon.png",
 "res/icons/corazon_lleno.png",
 "res/icons/corazon_vacio.png",
+"res/layer/edificios.js",
+"res/layer/montanyas.js",
 "res/runner/rastaIdle.png",
 "res/runner/rastaJump.png",
 "res/runner/rastaRun1.png",
