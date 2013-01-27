@@ -12,7 +12,11 @@ var SyncRunnerApp = cc.LayerColor.extend(
         PATTERNS : [
                 { player:"--------" },
                 { player:"a-------" },
+                { player:"----a---" },
                 { player:"a---a---" },
+                { player:"-b------" },
+                { player:"-----b--" },
+                { player:"-b---b--" },
         ]
     },
     // global state of the game (used in children)
@@ -237,6 +241,9 @@ var SyncRunnerApp = cc.LayerColor.extend(
                         this._gameState.score -= 5000;
                     }
                 }
+            }
+            else {
+                this._gameState.score -= 5000;
             }
         }
         if(e === cc.KEY.right)
