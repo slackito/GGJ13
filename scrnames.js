@@ -8,7 +8,7 @@ var scriptsnames = {
     ["montanyas",7,8,300],
     ["edificios",5,6,650],
     ["acera",6,6,750],
-//  ["enemies",6,6,70],
+    ["enemies",5,5,750],
     ["farolalejos",5,5,750],
     ["farolacerca",1,1,2000], 
 ]
@@ -44,7 +44,12 @@ var scriptsnames = {
 "res/layer/enemies.js" :
 // sprite(from res/bg/),minSpacing,maxSpacing)
 [
-	["mujer_tetas",1000,4000],
+	["mujer1",3000,8000],
+	["mujer2",3000,8000],
+	["mujer3",3000,8000],
+	["monster1",3000,8000],
+	["monster2",3000,8000],
+	["monster3",3000,8000],
 
 ],
 "res/layer/farolacerca.js" :

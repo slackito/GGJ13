@@ -6,7 +6,7 @@
     ["montanyas",7,8,300],
     ["edificios",5,6,650],
     ["acera",6,6,750],
-//  ["enemies",6,6,70],
+    ["enemies",5,5,750],
     ["farolalejos",5,5,750],
     ["farolacerca",1,1,2000], 
 ]
